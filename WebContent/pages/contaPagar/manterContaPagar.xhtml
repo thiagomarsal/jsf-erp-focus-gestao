@@ -1,0 +1,116 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<script>
+	function setaFornecedor(id, nome){
+		document.getElementById('manterContaPagarModal:idFornecedorContaPagar').value = id;
+		document.getElementById('manterContaPagarModal:idFornecedorContaPagar').focus();
+	    document.getElementById('manterContaPagarModal:nomeFornecedorContaPagar').value = nome;
+	}
+
+	function setaFormaPagamento(id, descricao){
+    	document.getElementById('manterContaPagarModal:idFormaPagamentoContaPagar').value = id;
+    	document.getElementById('manterContaPagarModal:idFormaPagamentoContaPagar').focus();
+        document.getElementById('manterContaPagarModal:descricaoFormaPagamentoContaPagar').value = descricao;
+    }
+</script>
+	<rich:modalPanel id="manterContaPagar" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter Conta a Pagar" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkContaPagar" />
+				<rich:componentControl for="manterContaPagar" attachTo="hidelinkContaPagar"
+					operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		<br />
+		<rich:messages style="color: red; font-weight: bold;" />
+		<a4j:form id="manterContaPagarModal" ajaxSubmit="true" reRender="numeroDocumentoContaPagar, idFornecedorContaPagar, nomeFornecedorContaPagar, dataVencimentoContaPagar, 
+           							dataQuitacaoContaPagar, valorContaPagar, jurosContaPagar, multaContaPagar, valorPagoContaPagar, idFormaPagamentoContaPagar, 
+           							descricaoFormaPagamentoContaPagar, observacaoContaPagar">
+			<h:panelGrid columns="3">
+
+				<h:outputText value="Documento:*" />
+				<h:inputText id="numeroDocumentoContaPagar" value="#{ContaPagarMBean.contaPagar.numeroDocumento}" disabled="#{ContaPagarMBean.inEditing}"/>
+				<h:outputText value="" />
+			</h:panelGrid>
+			
+			<h:panelGrid columns="4">
+				<h:outputText value="Fornecedor:*" />
+				<h:inputText size="5" id="idFornecedorContaPagar" value="#{ContaPagarMBean.fornecedorContaPagar.idFornecedor}" disabled="#{ContaPagarMBean.inEditing}"/>
+				<h:inputText size="40" readonly="true" id="nomeFornecedorContaPagar" value="#{ContaPagarMBean.fornecedorContaPagar.nomeRazaoSocial}" disabled="#{ContaPagarMBean.inEditing}"/>
+				<a4j:commandLink style="color:#000000" value="Selecionar Fornecedor" id="btnSelecionarFornecedor" disabled="#{ContaPagarMBean.inEditing}">
+                    	<rich:componentControl for="selecionarFornecedor" attachTo="btnSelecionarFornecedor" operation="show" event="onclick"/>
+                </a4j:commandLink>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="4">
+				<h:outputText value="Vencimento:*" />
+				<rich:calendar value="#{ContaPagarMBean.contaPagar.dataVencimento}" id="dataVencimentoContaPagar" popup="true" datePattern="dd/MM/yyyy" 
+                    				cellHeight="24px" cellWidth="22px" style="width:200px" disabled="#{ContaPagarMBean.inEditing}">
+                </rich:calendar>
+				<h:outputText value="Quitação:" />
+				<rich:calendar value="#{ContaPagarMBean.contaPagar.dataQuitacao}" id="dataQuitacaoContaPagar" popup="true" datePattern="dd/MM/yyyy" 
+                    				cellHeight="24px" cellWidth="22px" style="width:200px" disabled="#{ContaPagarMBean.inEditing}">
+                </rich:calendar>
+				
+				<h:outputText value="Valor:*" />
+				<h:inputText id="valorContaPagar" value="#{ContaPagarMBean.contaPagar.valor}" disabled="#{ContaPagarMBean.inEditing}">
+					<f:convertNumber   pattern="###,###.##" integerOnly="false" maxFractionDigits="2" />
+				</h:inputText>
+				<h:outputText value="Desconto:" />
+				<h:inputText id="descontoContaPagar" value="#{ContaPagarMBean.contaPagar.desconto}" disabled="#{ContaPagarMBean.inEditing}">
+					<f:convertNumber   pattern="###,###.##" integerOnly="false" maxFractionDigits="2" />
+				</h:inputText>
+				
+				<h:outputText value="Multa:" />
+				<h:inputText id="multaContaPagar" value="#{ContaPagarMBean.contaPagar.multa}" disabled="#{ContaPagarMBean.inEditing}">
+					<f:convertNumber   pattern="###,###.##" integerOnly="false" maxFractionDigits="2" />
+				</h:inputText>
+				<h:outputText value="Valor Pago:" />
+				<h:inputText id="valorPagoContaPagar" value="#{ContaPagarMBean.contaPagar.valorRecebido}" disabled="#{ContaPagarMBean.inEditing}">
+					<f:convertNumber   pattern="###,###.##" integerOnly="false" maxFractionDigits="2" />
+				</h:inputText>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="4">
+				<h:outputText value="Forma de Pagamento:*" />
+				<h:inputText size="5" id="idFormaPagamentoContaPagar" value="#{ContaPagarMBean.formaPagamentoContaPagar.idFormaPagamento}" disabled="#{ContaPagarMBean.inEditing}"/>
+				<h:inputText size="40" id="descricaoFormaPagamentoContaPagar" readonly="true" value="#{ContaPagarMBean.formaPagamentoContaPagar.descricao}" disabled="#{ContaPagarMBean.inEditing}"/>
+				<a4j:commandLink style="color:#000000" value="Selecionar Forma Pagamento" id="btnSelecionarFormaPagamento" disabled="#{ContaPagarMBean.inEditing}">
+                    	<rich:componentControl for="selecionarFormaPagamento" attachTo="btnSelecionarFormaPagamento" operation="show" event="onclick"/>
+                </a4j:commandLink>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<h:outputText value="Observação:" />
+				<h:inputTextarea style="font-size: 10pt;" cols="50" rows="2" id="observacaoContaPagar" value="#{ContaPagarMBean.contaPagar.obs}" label="Observações" disabled="#{ContaPagarMBean.inEditing}" />
+			</h:panelGrid>
+			<a4j:commandButton action="#{ContaPagarMBean.listAll}" actionListener="#{ContaPagarMBean.listenerSave}" value="Grava"
+				id="buttonSaveContaPagar" disabled="#{ContaPagarMBean.inEditing}" reRender="tableContaPagar, numeroDocumentoContaPagar, idFornecedorContaPagar, nomeFornecedorContaPagar, dataVencimentoContaPagar, 
+           							dataQuitacaoContaPagar, valorContaPagar, jurosContaPagar, multaContaPagar, valorPagoContaPagar, idFormaPagamentoContaPagar, 
+           							descricaoFormaPagamentoContaPagar, observacaoContaPagar"/>
+			<a4j:commandButton action="#{ContaPagarMBean.listAll}"	actionListener="#{ContaPagarMBean.listenerDelete}" value="Cancelar"
+				id="buttonDeleteContaPagar" reRender="tableContaPagar" disabled="#{ContaPagarMBean.showButton}" />
+		</a4j:form>
+	</rich:modalPanel>
+	<ui:include src="../fornecedor/selecionarFornecedor.xhtml" />
+	<ui:include src="../formaPagamento/selecionarFormaPagamento.xhtml" />
+</ui:composition>

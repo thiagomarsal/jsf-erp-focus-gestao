@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory name="Focus Gestão">
+		<!-- Configuração-->
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/focusgestaoDS</property>
+		<property name="hibernate.connection.username">focususer</property>
+		<property name="hibernate.connection.password">focuspass</property>
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+		
+		<!-- Configuração 
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/focusgestaods</property>
+        <property name="hibernate.connection.username">focususer</property>
+        <property name="hibernate.connection.password">focuspass</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        -->
+		<!-- Mapeamento das Classes Beans -->
+		<mapping class="br.com.focus.bean.Modelo" />
+		<mapping class="br.com.focus.bean.Cargo" />
+		<mapping class="br.com.focus.bean.Cidade" />
+		<mapping class="br.com.focus.bean.Compra" />
+		<mapping class="br.com.focus.bean.Cliente" />
+		<mapping class="br.com.focus.bean.Compra" />
+		<mapping class="br.com.focus.bean.CondicaoPagamento" />
+		<mapping class="br.com.focus.bean.ContaPagar" />
+		<mapping class="br.com.focus.bean.ContaReceber" />
+		<mapping class="br.com.focus.bean.Cor" />
+		<mapping class="br.com.focus.bean.Estado" />
+		<mapping class="br.com.focus.bean.FormaPagamento" />
+		<mapping class="br.com.focus.bean.Fornecedor" />
+		<mapping class="br.com.focus.bean.Funcionario" />
+		<mapping class="br.com.focus.bean.Grupo" />
+		<mapping class="br.com.focus.bean.Linha" />
+		<mapping class="br.com.focus.bean.Marca" />
+		<mapping class="br.com.focus.bean.Material" />
+		<mapping class="br.com.focus.bean.OrdemServico" />
+		<mapping class="br.com.focus.bean.Pais"/>
+		<mapping class="br.com.focus.bean.Unidade"/>
+		<mapping class="br.com.focus.bean.PerfilAcesso"/>
+		<mapping class="br.com.focus.bean.Produto" />
+		<mapping class="br.com.focus.bean.ProdutosSelecionados" />
+		<mapping class="br.com.focus.bean.Receita" />
+		<mapping class="br.com.focus.bean.Servico" />
+		<mapping class="br.com.focus.bean.ServicosSelecionados" />
+		<mapping class="br.com.focus.bean.Tipo" />
+		<mapping class="br.com.focus.bean.Usuario" />
+		<mapping class="br.com.focus.bean.Venda" />
+
+	</session-factory>
+</hibernate-configuration>

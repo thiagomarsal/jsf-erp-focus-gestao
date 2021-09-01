@@ -1,0 +1,120 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<f:subview id="selecionarEstadoModal">
+    <rich:modalPanel id="selecionarEstado" autosized="true">
+    <f:facet name="header">
+            <h:outputText value="Selecionar Estado" />
+        </f:facet>
+        <f:facet name="controls">
+            <h:panelGroup>
+                <h:graphicImage value="/images/modal/close.png" style="cursor:pointer" id="hidelinkSelecionarEstado" />
+                <rich:componentControl for="selecionarEstado" attachTo="hidelinkSelecionarEstado" operation="hide" event="onclick"/>
+            </h:panelGroup>
+        </f:facet>
+        <br/>
+		<center><a4j:form>
+			<h:panelGrid columns="3">
+				<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Nome:" />
+								<h:inputText value="#{EstadoMBean.estadoSearch.nome}">
+					<a4j:support event="onkeyup" action="#{EstadoMBean.searchByParameter}" actionListener="#{EstadoMBean.listenerSearchByParameter}" reRender="tableEstado, scEstado"/>
+				</h:inputText>
+				<a4j:commandButton value="Refresh" action="#{EstadoMBean.searchByParameter}" actionListener="#{EstadoMBean.listenerSearchByParameter}" reRender="tableEstado, scEstado">
+					<f:param id="paramSearch" name="paramSearch" value="#{EstadoMBean.estadoSearch.nome}" />
+				</a4j:commandButton>
+			</h:panelGrid>
+			<br/>
+			<br/>
+           	    <a4j:commandLink style="color : #000000;" value="Inserir" id="btnSave" actionListener="#{EstadoMBean.listenerScreenSave}" reRender="idEstado, nomeEstado, siglaEstado, idPaisEstado, nomePaisEstado, buttonSaveEstado, buttonDeleteEstado">
+				<rich:componentControl for="manterEstado" attachTo="btnSave" operation="show" event="onclick" />
+			</a4j:commandLink>
+			<br/>
+			<br/>
+			<rich:dataTable width="500" id="tableEstado" rows="10" value="#{EstadoMBean.estados}" var="estado">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column>
+						<h:outputText value="Código" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Nome" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Sigla" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="País" />
+					</rich:column>
+					<rich:column colspan="3" width="30px">
+						<h:outputText value="Ação" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column style="text-align:center" sortBy="#{estado.idEstado}" filterBy="#{estado.idEstado}" filterEvent="onkeyup">
+               	<f:facet name="header">
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+                <h:outputText value="#{estado.idEstado}"/>
+            </rich:column> 
+            <rich:column sortBy="#{estado.nome}" filterBy="#{estado.nome}" filterEvent="onkeyup">
+                <h:outputText value="#{estado.nome}"/> 
+            </rich:column>
+            <rich:column style="text-align:center" sortBy="#{estado.sigla}" filterBy="#{estado.sigla}" filterEvent="onkeyup">
+                <h:outputText value="#{estado.sigla}"/> 
+            </rich:column>
+            <rich:column style="text-align:center" sortBy="#{estado.pais.nome}" filterBy="#{estado.pais.nome}" filterEvent="onkeyup">
+                <h:outputText value="#{estado.pais.nome}"/> 
+            </rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<f:facet  name="header" >
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+					<a4j:commandLink id="btnUpdateEstado" action="#{EstadoMBean.listAll}" actionListener="#{EstadoMBean.listenerUpdate}" oncomplete="Richfaces.showModalPanel('manterEstado');"
+								     reRender="manterEstadoModal ">
+						<h:graphicImage value="/images/icons/edit.gif" style="cursor:pointer; border:0;" id="hidelinkedit" title="Editar"/>
+						<f:param id="paramUpdate" name="paramUpdate" value="#{estado}" />
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+					<a4j:commandLink id="btnDeleteEstado"	action="#{EstadoMBean.listAll}" actionListener="#{EstadoMBean.listenerScreenDelete}" oncomplete="Richfaces.showModalPanel('manterEstado');"
+						             reRender="manterEstadoModal">
+						<h:graphicImage value="/images/icons/delete.gif" style="cursor:pointer; border:0;" id="hidelinkdelete" title="Remover"/>
+						<f:param id="paramDelete" name="paramDelete" value="#{estado.idEstado}"/>
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+					<a4j:commandLink id="btnSelectEstado" action="#{EstadoMBean.listAll}" actionListener="#{EstadoMBean.listenerScreenModal}"
+                        			oncomplete="setaEstadoCidade('#{estado.idEstado}','#{estado.nome}'); Richfaces.hideModalPanel('selecionarEstado');">
+                            <h:graphicImage value="/images/icons/open.gif" style="cursor:pointer; border:0" id="hidelinkselectEstado" title="Selecionar" />
+                            <f:param id="paramModal" name="paramModal" value="#{estado}"/>
+                        </a4j:commandLink>
+				</rich:column>
+				<f:facet name="footer">
+		   				<rich:columnGroup >
+		   					<rich:column colspan="7" breakBefore="true" style="text-align:center">
+		   						<rich:datascroller align="center" for="tableEstado" maxPages="30" page="#{EstadoMBean.scrollerPage}" id="scEstado" renderIfSinglePage="false"/>
+		   					</rich:column>
+		   				</rich:columnGroup>
+		   			</f:facet>
+			</rich:dataTable>
+		</a4j:form></center>
+    </rich:modalPanel>
+</f:subview>
+<ui:include src="manterEstado.xhtml"/>
+</ui:composition>

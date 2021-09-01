@@ -1,0 +1,111 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<f:subview id="selecionarFormaPagamentoModal">
+    <rich:modalPanel id="selecionarFormaPagamento" autosized="true">
+    <a4j:keepAlive beanName="FormaPagamentoMBean" />
+    <f:facet name="header">
+            <h:outputText value="Selecionar FormaPagamento" />
+        </f:facet>
+        <f:facet name="controls">
+            <h:panelGroup>
+                <h:graphicImage value="/images/modal/close.png" style="cursor:pointer" id="hidelinkSelecionar" />
+                <rich:componentControl for="selecionarFormaPagamento" attachTo="hidelinkSelecionar" operation="hide" event="onclick"/>
+            </h:panelGroup>
+        </f:facet>
+        <br/>
+        <center>
+		<a4j:form>
+			<h:panelGrid columns="3">
+				<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Descrição" />
+				<h:inputText value="#{FormaPagamentoMBean.formaPagamentoSearch.descricao}">
+					<a4j:support event="onkeyup" action="#{FormaPagamentoMBean.searchByParameter}" actionListener="#{FormaPagamentoMBean.listenerSearchByParameter}" reRender="tableFormaPagamento, scFormaPagamento"/>
+				</h:inputText>
+				<a4j:commandButton value="Refresh" action="#{FormaPagamentoMBean.searchByParameter}" actionListener="#{FormaPagamentoMBean.listenerSearchByParameter}" reRender="tableFormaPagamento, scFormaPagamento">
+					<f:param id="paramSearch" name="paramSearch" value="#{FormaPagamentoMBean.formaPagamentoSearch.descricao}" />
+				</a4j:commandButton>
+			</h:panelGrid>
+			<br/>
+			<br/>
+           	<a4j:commandLink style="color : #000000" value="Inserir" id="btnSaveFormaPagamento" actionListener="#{FormaPagamentoMBean.listenerScreenSave}" reRender="idFormaPagamento, descricaoFormaPagamento, buttonSaveFormaPagamento, buttonDeleteFormaPagamento">
+				<rich:componentControl for="manterFormaPagamento" attachTo="btnSaveFormaPagamento" operation="show" event="onclick" />
+			</a4j:commandLink>
+			<br/>
+			<br/>
+			<rich:dataTable width="500" id="tableFormaPagamento" rows="10" value="#{FormaPagamentoMBean.formasPagamento}" var="formaPagamento">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column>
+						<h:outputText value="Código" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Descrição" />
+					</rich:column>
+					<rich:column colspan="3" width="30px">
+						<h:outputText value="Ação" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column style="text-align:center" sortBy="#{formaPagamento.idFormaPagamento}" filterBy="#{formaPagamento.idFormaPagamento}" filterEvent="onkeyup">
+               	<f:facet name="header">
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+                <h:outputText value="#{formaPagamento.idFormaPagamento}"/>
+            </rich:column> 
+            <rich:column sortBy="#{formaPagamento.descricao}" filterBy="#{formaPagamento.descricao}" filterEvent="onkeyup">
+                <h:outputText value="#{formaPagamento.descricao}"/> 
+            </rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<f:facet  name="header" >
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+					<a4j:commandLink id="btnUpdateFormaPagamento" action="#{FormaPagamentoMBean.listAll}" actionListener="#{FormaPagamentoMBean.listenerUpdate}" oncomplete="Richfaces.showModalPanel('manterFormaPagamento');"
+								     reRender="manterFormaPagamentoModal ">
+						<h:graphicImage value="/images/icons/edit.gif" style="cursor:pointer; border:0;" id="hidelinkedit" title="Editar"/>
+						<f:param id="paramUpdate" name="paramUpdate" value="#{formaPagamento}" />
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+					<a4j:commandLink id="btnDeleteFormaPagamento"	action="#{FormaPagamentoMBean.listAll}" actionListener="#{FormaPagamentoMBean.listenerScreenDelete}" oncomplete="Richfaces.showModalPanel('manterFormaPagamento');"
+						             reRender="manterFormaPagamentoModal">
+						<h:graphicImage value="/images/icons/delete.gif" style="cursor:pointer; border:0;" id="hidelinkdelete" title="Remover"/>
+						<f:param id="paramDelete" name="paramDelete" value="#{formaPagamento.idFormaPagamento}"/>
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+					<a4j:commandLink id="btnSelectFormaPagamento" action="#{FormaPagamentoMBean.listAll}" actionListener="#{FormaPagamentoMBean.listenerScreenModal}"
+                        			oncomplete="setaFormaPagamento('#{formaPagamento.idFormaPagamento}','#{formaPagamento.descricao}'); Richfaces.hideModalPanel('selecionarFormaPagamento');">
+                            <h:graphicImage value="/images/icons/open.gif" style="cursor:pointer; border:0" id="hidelinkselect" title="Selecionar" />
+                            <f:param id="paramModal" name="paramModal" value="#{formaPagamento}"/>
+                        </a4j:commandLink>
+				</rich:column>
+				<f:facet name="footer">
+		   				<rich:columnGroup >
+		   					<rich:column colspan="5" breakBefore="true" style="text-align:center">
+		   						<rich:datascroller align="center" for="tableFormaPagamento" maxPages="30" page="#{FormaPagamentoMBean.scrollerPage}" id="scFormaPagamento" renderIfSinglePage="false"/>
+		   					</rich:column>
+		   				</rich:columnGroup>
+		   			</f:facet>
+			</rich:dataTable>
+		</a4j:form>
+		</center>
+    </rich:modalPanel>
+</f:subview>
+<ui:include src="manterFormaPagamento.xhtml"/>
+</ui:composition>

@@ -1,0 +1,110 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<f:subview id="selecionarCargoModal">
+    <rich:modalPanel id="selecionarCargo" autosized="true">
+    <f:facet name="header">
+            <h:outputText value="Selecionar Cargo" />
+        </f:facet>
+        <f:facet name="controls">
+            <h:panelGroup>
+                <h:graphicImage value="/images/modal/close.png" style="cursor:pointer" id="hidelinkSelecionarCargo" />
+                <rich:componentControl for="selecionarCargo" attachTo="hidelinkSelecionarCargo" operation="hide" event="onclick"/>
+            </h:panelGroup>
+        </f:facet>
+        <br/>
+        <center>
+		<a4j:form>
+			<h:panelGrid columns="3">
+				<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Descrição" />
+				<h:inputText value="#{CargoMBean.cargoSearch.descricao}">
+					<a4j:support event="onkeyup" action="#{CargoMBean.searchByParameter}" actionListener="#{CargoMBean.listenerSearchByParameter}" reRender="tableCargo, scCargo"/>
+				</h:inputText>
+				<a4j:commandButton value="Refresh" action="#{CargoMBean.searchByParameter}" actionListener="#{CargoMBean.listenerSearchByParameter}" reRender="tableCargo, scCargo">
+					<f:param id="paramSearch" name="paramSearch" value="#{CargoMBean.cargoSearch.descricao}" />
+				</a4j:commandButton>
+			</h:panelGrid>
+			<br/>
+			<br/>
+           	<a4j:commandLink style="color : #000000;" value="Inserir" id="btnSaveCargo" actionListener="#{CargoMBean.listenerScreenSave}" reRender="idCargo, descricaoCargo, buttonSaveCargo, buttonDeleteCargo">
+				<rich:componentControl for="manterCargo" attachTo="btnSaveCargo" operation="show" event="onclick" />
+			</a4j:commandLink>
+			<br/>
+			<br/>
+			<rich:dataTable width="500" id="tableCargo" rows="10" value="#{CargoMBean.cargos}" var="cargo">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column>
+						<h:outputText value="Código" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Descrição" />
+					</rich:column>
+					<rich:column colspan="3" width="30px">
+						<h:outputText value="Ação" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column style="text-align:center" sortBy="#{cargo.idCargo}" filterBy="#{cargo.idCargo}" filterEvent="onkeyup">
+               	<f:facet name="header">
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+                <h:outputText value="#{cargo.idCargo}"/>
+            </rich:column> 
+            <rich:column sortBy="#{cargo.descricao}" filterBy="#{cargo.descricao}" filterEvent="onkeyup">
+                <h:outputText value="#{cargo.descricao}"/> 
+            </rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<f:facet  name="header" >
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+					<a4j:commandLink id="btnUpdateCargo" action="#{CargoMBean.listAll}" actionListener="#{CargoMBean.listenerUpdate}" oncomplete="Richfaces.showModalPanel('manterCargo');"
+								     reRender="manterCargoModal ">
+						<h:graphicImage value="/images/icons/edit.gif" style="cursor:pointer; border:0;" id="hidelinkedit" title="Editar"/>
+						<f:param id="paramUpdate" name="paramUpdate" value="#{cargo}" />
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+					<a4j:commandLink id="btnDeleteCargo"	action="#{CargoMBean.listAll}" actionListener="#{CargoMBean.listenerScreenDelete}" oncomplete="Richfaces.showModalPanel('manterCargo');"
+						             reRender="manterCargoModal">
+						<h:graphicImage value="/images/icons/delete.gif" style="cursor:pointer; border:0;" id="hidelinkdelete" title="Remover"/>
+						<f:param id="paramDelete" name="paramDelete" value="#{cargo.idCargo}"/>
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+					<a4j:commandLink id="btnSelectCargo" action="#{CargoMBean.listAll}" actionListener="#{CargoMBean.listenerScreenModal}"
+                        			oncomplete="setaCargo('#{cargo.idCargo}','#{cargo.descricao}'); Richfaces.hideModalPanel('selecionarCargo');">
+                            <h:graphicImage value="/images/icons/open.gif" style="cursor:pointer; border:0" id="hidelinkselectCargo" title="Selecionar" />
+                            <f:param id="paramModal" name="paramModal" value="#{cargo}"/>
+                        </a4j:commandLink>
+				</rich:column>
+				<f:facet name="footer">
+		   				<rich:columnGroup >
+		   					<rich:column colspan="5" breakBefore="true" style="text-align:center">
+		   						<rich:datascroller align="center" for="tableCargo" maxPages="30" page="#{CargoMBean.scrollerPage}" id="scCargo" renderIfSinglePage="false"/>
+		   					</rich:column>
+		   				</rich:columnGroup>
+		   			</f:facet>
+			</rich:dataTable>
+		</a4j:form>
+		</center>
+    </rich:modalPanel>
+</f:subview>
+<ui:include src="manterCargo.xhtml"/>
+</ui:composition>

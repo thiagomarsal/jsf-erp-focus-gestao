@@ -1,0 +1,60 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+
+	<rich:modalPanel id="manterModelo" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter Modelo" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelink" />
+				<rich:componentControl for="manterModelo" attachTo="hidelink"
+					operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		<br />
+		<rich:messages style="color: red; font-weight: bold;"></rich:messages>
+		<a4j:form id="manterModeloModal" ajaxSubmit="true"
+			reRender="idModelo, descricaoModelo">
+			<h:panelGrid columns="2">
+
+				<h:outputText value="Código " />
+				<h:inputText value="#{ModeloMBean.modelo.idModelo}" id="idModelo"
+					readonly="true" />
+
+				<h:outputText value="Descrição* " />
+				<h:inputText value="#{ModeloMBean.modelo.descricao}"
+					id="descricaoModelo" required="true"
+					requiredMessage="Descrição é Obrigatória!"
+					disabled="#{ModeloMBean.inEditing}" maxlength="30">
+					<f:validateLength minimum="1" maximum="30" />
+				</h:inputText>
+			</h:panelGrid>
+			<a4j:commandButton action="#{ModeloMBean.listAll}"
+				actionListener="#{ModeloMBean.listenerSave}" value="Grava"
+				id="buttonSaveModelo" reRender="tableModelo"
+				disabled="#{ModeloMBean.inEditing}" />
+			<a4j:commandButton action="#{ModeloMBean.listAll}"
+				actionListener="#{ModeloMBean.listenerDelete}" value="Exclui"
+				id="buttonDeleteModelo" reRender="tableModelo"
+				disabled="#{ModeloMBean.showButton}" />
+		</a4j:form>
+	</rich:modalPanel>
+</ui:composition>

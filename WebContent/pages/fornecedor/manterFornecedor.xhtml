@@ -1,0 +1,191 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:stella="http://stella.caelum.com.br/faces">
+		<script>
+		    function setaCidade(id, nome, nomeEstadoFornecedor, nomePaisFornecedor, dddTelCidadeFornecedor, dddCelCidadeFornecedor, dddFaxCidadeFornecedor){
+		    	document.getElementById('manterFornecedorModal:idCidadeFornecedor').value = id;
+		        document.getElementById('manterFornecedorModal:nomeCidadeFornecedor').value = nome;
+		        document.getElementById('manterFornecedorModal:nomeEstadoFornecedor').value = nomeEstadoFornecedor;
+		        document.getElementById('manterFornecedorModal:nomePaisFornecedor').value = nomePaisFornecedor;
+		        document.getElementById('manterFornecedorModal:dddTelCidadeFornecedor').value = dddTelCidadeFornecedor;
+		        document.getElementById('manterFornecedorModal:dddCelCidadeFornecedor').value = dddCelCidadeFornecedor;
+		        document.getElementById('manterFornecedorModal:dddFaxCidadeFornecedor').value = dddFaxCidadeFornecedor;
+		    }
+		</script>
+		
+		<rich:modalPanel id="manterFornecedor" autosized="true">
+		<f:facet name="header">
+		<h:outputText value="Manter Fornecedor" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkFornecedor" />
+				<rich:componentControl for="manterFornecedor" attachTo="hidelinkFornecedor"
+					operation="hide" event="onclick"/>
+			</h:panelGroup>
+		</f:facet>
+			<rich:messages style="color: red; font-weight: bold;"></rich:messages>
+			<a4j:form id="manterFornecedorModal" ajaxSubmit="true">
+				<h:panelGrid columns="2">
+					<h:outputText value="Código" />
+					<h:inputText size="10" value="#{FornecedorMBean.fornecedor.idFornecedor}" id="idFornecedor" readonly="true" />
+					<h:outputText value="Razão Social *" />
+					<h:inputText size="80" value="#{FornecedorMBean.fornecedor.nomeRazaoSocial}" id="razaoSocialFornecedor" required="true"
+						requiredMessage="Razão Social é Obrigatório!"
+						disabled="#{FornecedorMBean.inEditing}" maxlength="100">
+						<f:validateLength minimum="1" maximum="100" />
+					</h:inputText>
+					<h:outputText value="Nome Fantasia"/>
+					<h:inputText size="80" value="#{FornecedorMBean.fornecedor.apelidoNomeFantasia}" id="nomeFantasiaFornecedor" disabled="#{FornecedorMBean.inEditing}" maxlength="100"/>
+				</h:panelGrid>
+				<h:panelGrid columns="6">
+					<h:outputText value="Cnpj *" />
+					<h:inputText value="#{FornecedorMBean.fornecedor.cpfCnpj}" id="cnpjFornecedor" required="true" requiredMessage="CNPJ é Obrigaorio!"  disabled="#{FornecedorMBean.inEditing}"
+									validatorMessage="CNPJ Invalido !!!">
+						<stella:validateCNPJ />
+					</h:inputText>
+
+					<h:outputText value="I.E. *" />
+					<h:inputText value="#{FornecedorMBean.fornecedor.rgInscricao}" id="inscricaoFornecedor" required="true" requiredMessage="I.E. é Obrigatório!"
+					 maxlength="15"	disabled="#{FornecedorMBean.inEditing}">
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+
+					<h:outputText value="Contato: " />
+                        <h:inputText value="#{FornecedorMBean.fornecedor.contato}" id="contatoFornecedor" disabled="#{FornecedorMBean.inEditing}" maxlength="40" >
+                            <f:validateLength maximum="40" />
+                     </h:inputText>
+					</h:panelGrid>
+					<h:panelGrid columns="9">
+					<h:outputText value="Telefone *" />
+					<h:inputText size="1" value="#{FornecedorMBean.fornecedor.cidade.ddd}" id="dddTelCidadeFornecedor" readonly="true" disabled="#{FornecedorMBean.inEditing}" />
+					<h:inputText value="#{FornecedorMBean.fornecedor.telefone}" id="telefoneFornecedor" required="true" requiredMessage="Telefone é Obrigatório!"
+					 maxlength="15"	disabled="#{FornecedorMBean.inEditing}">
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+
+					<h:outputText value="Celular" />
+					<h:inputText size="1" value="#{FornecedorMBean.fornecedor.cidade.ddd}" id="dddCelCidadeFornecedor" readonly="true" disabled="#{FornecedorMBean.inEditing}" />
+					<h:inputText value="#{FornecedorMBean.fornecedor.celular}" id="celularFornecedor" maxlength="15" disabled="#{FornecedorMBean.inEditing}">
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+
+					<h:outputText value="Fax "/>
+					<h:inputText size="1" value="#{FornecedorMBean.fornecedor.cidade.ddd}" id="dddFaxCidadeFornecedor" readonly="true" disabled="#{FornecedorMBean.inEditing}" />
+					<h:inputText value="#{FornecedorMBean.fornecedor.fax}" id="faxFornecedor" maxlength="15" disabled="#{FornecedorMBean.inEditing}">
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="6">
+                     <h:outputText value="Email " />
+                     <h:inputText size="40" value="#{FornecedorMBean.fornecedor.email}" id="emailFornecedor" disabled="#{FornecedorMBean.inEditing}" maxlength="40">
+                        <f:validateLength maximum="40" />
+                     </h:inputText>
+
+                     <h:outputText value="Site " />
+                     <h:inputText size="40" value="#{FornecedorMBean.fornecedor.site}" id="siteFornecedor" disabled="#{FornecedorMBean.inEditing}" maxlength="40">
+                            <f:validateLength maximum="40" />
+                     </h:inputText>
+                     
+				</h:panelGrid>
+				<table>
+					<tr>
+						<td>
+						<fieldset class="demo_fieldset" style="width: 80%">
+						<legend	class="demo_legend">Endereço *</legend>
+						
+						<h:panelGrid columns="4">
+							<h:outputText value="Logradouro:*" />
+                    		<h:inputText size="65" value="#{FornecedorMBean.enderecoFornecedor.logradouro}" id="logradouroFornecedor" required="true" requiredMessage="Logradouro é Obrigatório" disabled="#{FornecedorMBean.inEditing}" maxlength="60">
+                            	<f:validateLength maximum="60" />
+                        	</h:inputText>
+                        	
+                        	<h:outputText value="Numero: " />
+                    		<h:inputText  size="7" value="#{FornecedorMBean.enderecoFornecedor.numeroPredial}" id="numeroPredialFornecedor" required="true" requiredMessage="Numero Predial é Obrigatório" disabled="#{FornecedorMBean.inEditing}" maxlength="10">
+                            	<f:validateLength maximum="10" />
+                        	</h:inputText>
+                        </h:panelGrid>	
+                        
+ 						<h:panelGrid columns="7">
+                    		<h:outputText value="Bairro: *" />
+                    		<h:inputText value="#{FornecedorMBean.enderecoFornecedor.bairro}" id="bairroFornecedor" required="true" requiredMessage="Bairro é Obrigatório!" disabled="#{FornecedorMBean.inEditing}" maxlength="40">
+                            <f:validateLength maximum="40" />
+                        </h:inputText>
+
+                    	<h:outputText value="Cidade: *" />
+                    	<h:inputText size="1" value="#{FornecedorMBean.cidadeFornecedor.idCidade}" id="idCidadeFornecedor" disabled="#{FornecedorMBean.inEditing}" required="true" requiredMessage="Cidade é Obrigatório!"/>
+                        <h:inputText size="16" value="#{FornecedorMBean.cidadeFornecedor.nome}" id="nomeCidadeFornecedor" readonly="true" disabled="#{FornecedorMBean.inEditing}"/>
+                        <a4j:commandLink style="color:#000000" value="Selecionar Cidade" id="btnSelecionar" disabled="#{FornecedorMBean.showButton}">
+                            <rich:componentControl for="selecionarCidade" attachTo="btnSelecionar" operation="show" event="onclick"/>
+                        </a4j:commandLink>
+						
+						</h:panelGrid>
+					<h:panelGrid columns="6">
+                   <h:outputText value="Estado: " />
+                   <h:inputText size="16" value="#{FornecedorMBean.fornecedor.cidade.estado.nome}" id="nomeEstadoFornecedor" readonly="true" disabled="#{FornecedorMBean.inEditing}"/>
+
+                   <h:outputText value="Pais: " />
+                   <h:inputText size="16" value="#{FornecedorMBean.fornecedor.cidade.estado.pais.nome}" id="nomePaisFornecedor" readonly="true" disabled="#{FornecedorMBean.inEditing}"/>
+
+                   <h:outputText value="CEP: " />
+                   <h:inputText value="#{FornecedorMBean.enderecoFornecedor.cep}" id="cepFornecedor" disabled="#{FornecedorMBean.inEditing}" maxlength="10">
+                            <f:validateLength maximum="10" />
+                   </h:inputText>
+                   </h:panelGrid>
+                   
+                   <h:panelGrid columns="2">
+		           	<h:outputText value="Complemento: " />
+        		    <h:inputText size="80" value="#{FornecedorMBean.enderecoFornecedor.complemento}" id="complementoFornecedor" disabled="#{FornecedorMBean.inEditing}" maxlength="100">
+                    	<f:validateLength maximum="100" />
+                   	</h:inputText>
+          		   </h:panelGrid>
+						</fieldset>
+						</td>
+					</tr>
+				</table>
+				<h:panelGrid columns="2">
+					<h:outputText value="Observações" />
+					<h:inputTextarea style="font-size: 10pt;" cols="70" rows="2" id="observacao"	value="#{FornecedorMBean.fornecedor.obs}" label="Observações" disabled="#{FornecedorMBean.inEditing}"/>
+				</h:panelGrid>
+				<h:panelGrid columns="4">                    
+                    <h:outputText value="Data de Cadastro: " />
+                    <h:inputText  value="#{FornecedorMBean.fornecedor.dataCadastro}" id="dataCadastroFornecedor" readonly="true" disabled="#{FornecedorMBean.inEditing}" maxlength="10">
+                       <f:convertDateTime  type="date" pattern="dd/MM/yyyy"/>
+                    </h:inputText>
+                    
+                    <h:outputText value="Data de Atualização: " />
+                    <h:inputText  value="#{FornecedorMBean.fornecedor.dataAtualizacao }" id="dataAtualizacaoFornecedor" readonly="true" disabled="#{FornecedorMBean.inEditing}" maxlength="10">
+                       <f:convertDateTime  type="date" pattern="dd/MM/yyyy"/>
+                    </h:inputText>
+				</h:panelGrid>
+
+				<a4j:commandButton action="#{FornecedorMBean.listAll}"
+					actionListener="#{FornecedorMBean.listenerSave}" value="Grava"
+					id="buttonSaveFornecedor" reRender="tableFornecedor, manterFornecedorModal"
+					disabled="#{FornecedorMBean.inEditing}">
+				</a4j:commandButton>
+				<a4j:commandButton action="#{FornecedorMBean.listAll}"
+					actionListener="#{FornecedorMBean.listenerDelete}" value="Exclui"
+					id="buttonDeleteFornecedor" reRender="tableFornecedor, manterFornecedorModal"
+					disabled="#{FornecedorMBean.showButton}"/>
+		</a4j:form>
+		</rich:modalPanel>
+		<ui:include src="../cidade/selecionarCidade.xhtml" />
+</ui:composition>

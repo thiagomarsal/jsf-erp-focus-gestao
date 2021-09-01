@@ -1,0 +1,110 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:panel>
+	<f:facet name="header">
+		<h:outputText value="Manter Fornecedor" />
+	</f:facet>
+		<center><a4j:form>
+			<h:panelGrid columns="3">
+				<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Razão Social:" />
+				<h:inputText value="#{FornecedorMBean.fornecedorSearch.nomeRazaoSocial}">
+					<a4j:support event="onkeyup" action="#{FornecedorMBean.searchByParameter}" actionListener="#{FornecedorMBean.listenerSearchByParameter}" reRender="tableFornecedor, scFornecedor"/>
+				</h:inputText>
+				<a4j:commandButton value="Refresh" action="#{FornecedorMBean.searchByParameter}" actionListener="#{FornecedorMBean.listenerSearchByParameter}" reRender="tableFornecedor, scFornecedor">
+					<f:param id="paramSearch" name="paramSearch" value="#{FornecedorMBean.fornecedorSearch.nomeRazaoSocial}" />
+				</a4j:commandButton>
+			</h:panelGrid>
+			<br/>
+			<br/>
+			<a4j:commandLink style="color : #000000;" value="Inserir" id="btnSaveFornecedor" actionListener="#{FornecedorMBean.listenerScreenSave}" reRender="manterFornecedorModal">
+				<rich:componentControl for="manterFornecedor" attachTo="btnSaveFornecedor" operation="show" event="onclick" />
+			</a4j:commandLink>
+			<br/>
+			<br/>
+			<rich:dataTable width="500" id="tableFornecedor" rows="10" value="#{FornecedorMBean.fornecedores}" var="fornecedor">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column>
+						<h:outputText value="Código" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Razão Social" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="CNPJ" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Telefone" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Contato" />
+					</rich:column>
+					<rich:column colspan="2" width="30px">
+						<h:outputText value="Ação" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column style="text-align:center" sortBy="#{fornecedor.idFornecedor}" filterBy="#{fornecedor.idFornecedor}" filterEvent="onkeyup">
+               	<f:facet name="header">
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+                <h:outputText value="#{fornecedor.idFornecedor}"/>
+            </rich:column> 
+            <rich:column sortBy="#{fornecedor.nomeRazaoSocial}" filterBy="#{fornecedor.nomeRazaoSocial}" filterEvent="onkeyup">
+                <h:outputText value="#{fornecedor.nomeRazaoSocial}"/> 
+            </rich:column>
+            <rich:column style="text-align:center" sortBy="#{fornecedor.cpfCnpj}" filterBy="#{fornecedor.cpfCnpj}" filterEvent="onkeyup">
+                <h:outputText value="#{fornecedor.cpfCnpj}"/> 
+            </rich:column>
+            <rich:column style="text-align:center" sortBy="#{fornecedor.telefone}" filterBy="#{fornecedor.telefone}" filterEvent="onkeyup">
+                <h:outputText value="#{fornecedor.telefone}"/> 
+            </rich:column>
+            <rich:column style="text-align:center" sortBy="#{fornecedor.contato}" filterBy="#{fornecedor.contato}" filterEvent="onkeyup">
+                <h:outputText value="#{fornecedor.contato}"/> 
+            </rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<f:facet  name="header" >
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+                <a4j:commandLink id="btnUpdateFornecedor" action="#{FornecedorMBean.listAll}" actionListener="#{FornecedorMBean.listenerUpdate}" oncomplete="Richfaces.showModalPanel('manterFornecedor');"
+								     reRender="manterFornecedorModal ">
+						<h:graphicImage value="/images/icons/edit.gif" style="cursor:pointer; border:0;" id="hidelinkedit" title="Editar"/>
+						<f:param id="paramUpdate" name="paramUpdate" value="#{fornecedor.idFornecedor}" />
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<a4j:commandLink id="btnDeleteFornecedor"	action="#{FornecedorMBean.listAll}" actionListener="#{FornecedorMBean.listenerScreenDelete}" oncomplete="Richfaces.showModalPanel('manterFornecedor');"
+						             reRender="manterFornecedorModal">
+						<h:graphicImage value="/images/icons/delete.gif" style="cursor:pointer; border:0;" id="hidelinkdelete" title="Remover"/>
+						<f:param id="paramDelete" name="paramDelete" value="#{fornecedor.idFornecedor}"/>
+					</a4j:commandLink>
+				</rich:column>
+				<f:facet name="footer">
+		   				<rich:columnGroup >
+		   					<rich:column colspan="7" breakBefore="true" style="text-align:center">
+		   						<rich:datascroller align="center" for="tableFornecedor" maxPages="30" page="#{FornecedorMBean.scrollerPage}" id="scFornecedor" renderIfSinglePage="false"/>
+		   					</rich:column>
+		   				</rich:columnGroup>
+		   			</f:facet>
+			</rich:dataTable>
+		</a4j:form></center>
+	</rich:panel>
+	<ui:include src="manterFornecedor.xhtml"/>
+</ui:composition>

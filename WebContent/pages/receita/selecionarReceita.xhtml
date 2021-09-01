@@ -1,0 +1,132 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<f:subview id="selecionarReceitaModal">
+    <rich:modalPanel id="selecionarReceita" autosized="true">
+    <f:facet name="header">
+            <h:outputText value="Manter Receitas" />
+        </f:facet>
+         <f:facet name="controls">
+            <h:panelGroup>
+                <h:graphicImage value="/images/modal/close.png" style="cursor:pointer" id="hidelinkSelecionarReceita" />
+                <rich:componentControl for="selecionarReceita" attachTo="hidelinkSelecionarReceita" operation="hide" event="onclick"/>
+            </h:panelGroup>
+        </f:facet>
+        <br/>
+		<center><a4j:form>
+			<h:panelGrid columns="3">
+				<h:outputText style="font-size: 8pt; font-weight: bolder;"
+					value="Observação" />
+				<h:inputText value="#{ReceitaMBean.receitaSearch.obs}">
+					<a4j:support event="onkeyup"
+						action="#{ReceitaMBean.searchByParameter}"
+						actionListener="#{ReceitaMBean.listenerSearchByParameter}"
+						reRender="tableReceita, scReceita" />
+				</h:inputText>
+				<a4j:commandButton value="Refresh"
+					action="#{ReceitaMBean.searchByParameter}"
+					actionListener="#{ReceitaMBean.listenerSearchByParameter}"
+					reRender="tableReceita, scReceita">
+					<f:param id="paramSearch" name="paramSearch"
+						value="#{ReceitaMBean.receitaSearch.obs}" />
+				</a4j:commandButton>
+			</h:panelGrid>
+			<br />
+			<br />
+			<a4j:commandLink style="color : #000000;" value="Inserir" id="btnSaveReceita" actionListener="#{ReceitaMBean.listenerScreenSave}" reRender="manterReceitaModal">
+				<rich:componentControl for="manterReceita" attachTo="btnSaveReceita" operation="show" event="onclick" />
+			</a4j:commandLink>
+			<br />
+			<br />
+			<rich:dataTable width="95%" id="tableReceita" rows="10" value="#{ReceitaMBean.receitas}" var="receita">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column>
+						<h:outputText value="Código" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Descrição" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Observação" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Preço Venda" />
+					</rich:column>
+					<rich:column colspan="3" width="30px">
+						<h:outputText value="Ação" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column style="text-align:center" sortBy="#{receita.idReceita}" filterBy="#{receita.idReceita}" filterEvent="onkeyup">
+               	<f:facet name="header">
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+                <h:outputText value="#{receita.idReceita}"/>
+            </rich:column> 
+            <rich:column sortBy="#{receita.descricao}" filterBy="#{receita.descricao}" filterEvent="onkeyup">
+                <h:outputText value="#{receita.descricao}"/> 
+            </rich:column>
+            <rich:column width="450px">
+                <h:outputText value="#{receita.obs}"/> 
+            </rich:column>
+            <rich:column style="text-align:center" sortBy="#{receita.precoVenda}" filterBy="#{receita.precoVenda}" filterEvent="onkeyup">
+                <h:outputText value="#{receita.precoVenda}">
+                	<f:convertNumber   pattern="R$ ###,###.00" maxFractionDigits="2" />
+                </h:outputText> 
+            </rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<f:facet  name="header" >
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+					<a4j:commandLink id="btnUpdateReceita" action="#{ReceitaMBean.listAll}" actionListener="#{ReceitaMBean.listenerUpdate}" oncomplete="Richfaces.showModalPanel('manterReceita');"
+								     reRender="manterReceitaModal ">
+						<h:graphicImage value="/images/icons/edit.gif" style="cursor:pointer; border:0;" id="hidelinkedit" title="Editar"/>
+						<f:param id="paramUpdate" name="paramUpdate" value="#{receita}" />
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<a4j:commandLink id="btnDeleteReceita"	action="#{ReceitaMBean.listAll}" actionListener="#{ReceitaMBean.listenerScreenDelete}" oncomplete="Richfaces.showModalPanel('manterReceita');"
+						             reRender="manterReceitaModal">
+						<h:graphicImage value="/images/icons/delete.gif" style="cursor:pointer; border:0;" id="hidelinkdelete" title="Remover"/>
+						<f:param id="paramDelete" name="paramDelete" value="#{receita.idReceita}"/>
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<f:facet  name="header" >
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+					<a4j:commandLink id="btnSelectReceita" actionListener="#{VendaMBean.listenerInsertItemList}" reRender="tableProdutosSelecionados, totalProdutosCompra, totalCompra" oncomplete="Richfaces.hideModalPanel('selecionarReceitaVenda');">
+						<h:graphicImage value="/images/icons/open.gif" style="cursor:pointer; border:0" id="hidelinkselectReceita" title="Selecionar" />
+						<f:param id="paramModalReceita" name="paramModalReceita" value="#{receita}" />
+					</a4j:commandLink>
+				</rich:column>
+				<f:facet name="footer">
+		   				<rich:columnGroup >
+		   					<rich:column colspan="8" breakBefore="true" style="text-align:center">
+		   						<rich:datascroller align="center" for="tableReceita" maxPages="30" page="#{ReceitaMBean.scrollerPage}" id="scReceita" renderIfSinglePage="false"/>
+		   					</rich:column>
+		   				</rich:columnGroup>
+		   			</f:facet>
+			</rich:dataTable>
+		</a4j:form></center>
+    </rich:modalPanel>
+    <ui:include src="manterReceita.xhtml"/>
+</f:subview>
+</ui:composition>

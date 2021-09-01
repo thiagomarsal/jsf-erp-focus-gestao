@@ -1,0 +1,92 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<script>
+    function setaEstadoCidade(id, nome){
+        //alert("função setDadosPais");
+        //alert(id);
+        document.getElementById('manterCidadeModal:idEstadoCidade').value = id;
+        document.getElementById('manterCidadeModal:idEstadoCidade').focus();
+        document.getElementById('manterCidadeModal:nomeEstadoCidade').value = nome;
+    }
+    
+</script>
+
+
+	<rich:modalPanel id="manterCidade" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter Cidade" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkCidade" />
+				<rich:componentControl for="manterCidade" attachTo="hidelinkCidade"
+					operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		<br />
+		<rich:messages style="color: red; font-weight: bold;" />
+		<a4j:form id="manterCidadeModal" ajaxSubmit="true"
+			reRender="idCidade, nomeCidade, dddCidade, idEstadoCidade, nomeEstadoCidade">
+			<h:panelGrid columns="2">
+
+				<h:outputText value="Código" />
+				<h:inputText value="#{CidadeMBean.cidade.idCidade}" id="idCidade"
+					readonly="true" />
+
+				<h:outputText value="Nome *" />
+				<h:inputText value="#{CidadeMBean.cidade.nome}" id="nomeCidade"	required="true" requiredMessage="Nome é Obrigatório!"
+					disabled="#{CidadeMBean.inEditing}" maxlength="30">
+					<f:validateLength minimum="2" maximum="30" />
+				</h:inputText>
+
+				<h:outputText value="DDD" />
+				<h:inputText value="#{CidadeMBean.cidade.ddd}" id="dddCidade"
+					converterMessage="DDI precisa ser um numero!" maxlength="3"
+					disabled="#{CidadeMBean.inEditing}">
+					<f:convertNumber integerOnly="true" />
+				</h:inputText>
+
+			</h:panelGrid>
+			<fieldset class="demo_fieldset"><legend
+				class="demo_legend">Estado</legend>
+			<h:panelGrid columns="2">
+				<h:inputText size="1" value="#{CidadeMBean.estadoCidade.idEstado}"
+					id="idEstadoCidade" disabled="#{CidadeMBean.inEditing}"
+					required="true" requiredMessage="Estado é Obrigatório!">
+				</h:inputText>
+				<h:inputText size="15" value="#{CidadeMBean.estadoCidade.nome}"
+					id="nomeEstadoCidade" disabled="#{CidadeMBean.inEditing}" />
+				<a4j:commandLink style="color : #000000;" value="Selecionar" id="btnSelect" disabled="#{CidadeMBean.showButton}">
+					<rich:componentControl for="selecionarEstado" attachTo="btnSelect" operation="show" event="onclick" />
+				</a4j:commandLink>
+			</h:panelGrid>
+			</fieldset>
+			<a4j:commandButton action="#{CidadeMBean.listAll}"
+				actionListener="#{CidadeMBean.listenerSave}" value="Grava"
+				id="buttonSaveCidade" reRender="tableCidade"
+				disabled="#{CidadeMBean.inEditing}" />
+			<a4j:commandButton action="#{CidadeMBean.listAll}"
+				actionListener="#{CidadeMBean.listenerDelete}" value="Exclui"
+				id="buttonDeleteCidade" reRender="tableCidade"
+				disabled="#{CidadeMBean.showButton}" />
+		</a4j:form>
+	</rich:modalPanel>
+	<ui:include src="../estado/selecionarEstado.xhtml" />
+</ui:composition>

@@ -1,0 +1,71 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:modalPanel id="manterUnidade" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter Unidade Medida" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkUnidade" />
+				<rich:componentControl for="manterUnidade"
+					attachTo="hidelinkUnidade" operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		<br />
+		<rich:messages style="color: red; font-weight: bold;" />
+		<a4j:form id="manterUnidadeModal" ajaxSubmit="true"
+			reRender="idUnidade, descricaoUnidade, siglaUnidade">
+			<h:panelGrid columns="2">
+
+				<h:outputText value="Código" />
+				<h:inputText
+					value="#{UnidadeMBean.unidade.idUnidade}"
+					id="idUnidade" readonly="true" />
+
+				<h:outputText value="Descrição*" />
+				<h:inputText value="#{UnidadeMBean.unidade.descricao}"
+					id="descricaoUnidade" required="true"
+					requiredMessage="Descrição é Obrigatória!"
+					disabled="#{UnidadeMBean.inEditing}" maxlength="30">
+					<f:validateLength minimum="1" maximum="30" />
+				</h:inputText>
+				
+				<h:outputText value="Sigla*" />
+				<h:inputText value="#{UnidadeMBean.unidade.sigla}"
+					id="siglaUnidade" required="true"
+					requiredMessage="Sigla é Obrigatória!"
+					disabled="#{UnidadeMBean.inEditing}" maxlength="30">
+					<f:validateLength minimum="1"/>
+				</h:inputText>
+			</h:panelGrid>
+			<a4j:commandButton action="#{UnidadeMBean.listAll}"
+				actionListener="#{UnidadeMBean.listenerSave}" value="Grava"
+				id="buttonSaveUnidade"
+				reRender="tableUnidade, scUnidade"
+				disabled="#{UnidadeMBean.inEditing}" />
+			<a4j:commandButton action="#{UnidadeMBean.listAll}"
+				actionListener="#{UnidadeMBean.listenerDelete}"
+				value="Exclui" id="buttonDeleteUnidade"
+				reRender="tableUnidade, scUnidade"
+				disabled="#{UnidadeMBean.showButton}" />
+
+		</a4j:form>
+	</rich:modalPanel>
+</ui:composition>

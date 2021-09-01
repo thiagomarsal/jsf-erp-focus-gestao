@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:*" PATH="*" SHAPE="16,176,53,106" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:0" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="compra::#pages#compra#compra.xhtml"
+    NAME="output2" PATH="/pages/compra/compra.xhtml"
+    TARGET="rules:#pages#compra#compra.xhtml" TITLE="compra" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="welcome::#welcome.xhtml" NAME="output"
+    PATH="/welcome.xhtml" TARGET="rules:#welcome.xhtml" TITLE="welcome" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="home::#login.xhtml" NAME="output1"
+    PATH="/login.xhtml" TARGET="rules:#login.xhtml" TITLE="home" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="pdvVenda::#pages#venda#pdvVenda.xhtml"
+    NAME="output7" PATH="/pages/venda/pdvVenda.xhtml"
+    TARGET="rules:#pages#venda#pdvVenda.xhtml" TITLE="pdvVenda" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="venda::#pages#venda#venda.xhtml"
+    NAME="output8" PATH="/pages/venda/venda.xhtml"
+    TARGET="rules:#pages#venda#venda.xhtml" TITLE="venda" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#compra#compra.xhtml"
+  PATH="/pages/compra/compra.xhtml" SHAPE="304,833,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#welcome.xhtml" PATH="/welcome.xhtml"
+  SHAPE="304,753,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#venda#venda.xhtml"
+  PATH="/pages/venda/venda.xhtml" SHAPE="304,817,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#venda#pdvVenda.xhtml"
+  PATH="/pages/venda/pdvVenda.xhtml" SHAPE="304,817,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
+  SHAPE="304,145,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

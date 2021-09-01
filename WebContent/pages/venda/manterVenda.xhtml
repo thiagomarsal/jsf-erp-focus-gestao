@@ -1,0 +1,251 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<ui:composition template="/templates/main.xhtml">
+	<ui:define name="title">Focus Gestão - Venda</ui:define>
+	<ui:define name="body">
+		<script>
+		    function setaCliente(id, nome){
+		    	document.getElementById('manterVenda:idClienteVenda').value = id;
+		        document.getElementById('manterVenda:nomeClienteVenda').value = nome;
+		    }
+		    function setaUsuario(id, nome){
+		    	document.getElementById('manterVenda:idUsuarioVenda').value = id;
+		        document.getElementById('manterVenda:nomeUsuarioVenda').value = nome;
+		    }
+		    function setaCondicaoPagamento(id, descricao, parcelas){
+		    	document.getElementById('manterVenda:idCondicaoPagamentoVenda').value = id;
+		        document.getElementById('manterVenda:descricaoCondicaoPagamentoVenda').value = descricao;
+		        document.getElementById('manterVenda:parcelasCondicaoPagamentoVenda').value = parcelas;
+		    }
+		</script>
+		<h:panelGroup id="wizard">
+		<a4j:form id="manterVenda" ajaxSubmit="true">
+		<rich:panel>
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="PDV - Venda"/>
+			</h:panelGroup>
+		</f:facet>
+			<rich:messages style="color: red; font-weight: bold;"></rich:messages>
+			
+				<h:panelGrid columns="8">
+					<h:outputText value="Número" />
+					<h:inputText size="10" value="#{VendaMBean.venda.idVenda}" id="idVenda" disabled="true" />
+					<h:outputText value="Cliente" />
+					<h:inputText size="3" value="#{VendaMBean.clienteVenda.idCliente}" id="idClienteVenda" required="true" requiredMessage="Cliente é Obrigatório!" disabled="#{VendaMBean.inEditing}"/>
+					<h:inputText size="60" value="#{VendaMBean.clienteVenda.nomeRazaoSocial}" id="nomeClienteVenda" readonly="true" disabled="#{VendaMBean.inEditing}">
+					</h:inputText>
+					<a4j:commandButton style="color:#000000" value="Selecionar Cliente" id="btnSelecionarClienteVenda" disabled="#{VendaMBean.inEditing}">
+                    	<rich:componentControl for="selecionarCliente" attachTo="btnSelecionarClienteVenda" operation="show" event="onclick"/>
+                    </a4j:commandButton>
+                </h:panelGrid>
+                <br/>
+                <h:panelGrid columns="7" >
+                <h:outputText value="Data Emissão:" />
+                    <rich:calendar value="#{VendaMBean.venda.dataEmissao}" id="dataEmissãoVenda" popup="true" datePattern="dd/MM/yyyy" 
+                    				cellHeight="24px" cellWidth="22px" style="width:200px" disabled="#{VendaMBean.inEditing}">
+                    </rich:calendar>
+                    <h:outputText value="Usuário" />
+					<h:inputText size="5" value="#{VendaMBean.usuarioVenda.idUsuario}" id="idUsuarioVenda" required="true" requiredMessage="Usuário é Obrigatório!" disabled="#{VendaMBean.inEditing}"/>
+					<h:inputText size="30" value="#{VendaMBean.usuarioVenda.login}" id="nomeUsuarioVenda" readonly="true" disabled="#{VendaMBean.inEditing}">
+					</h:inputText>
+					<a4j:commandButton style="color:#000000" value="Selecionar Usuário" id="btnSelecionarUsuario" disabled="#{VendaMBean.inEditing}">
+                    	<rich:componentControl for="selecionarUsuario" attachTo="btnSelecionarUsuario" operation="show" event="onclick"/>
+                    </a4j:commandButton>
+				</h:panelGrid>
+				<br/>
+				<br/>
+				<h:panelGrid columns="2">
+				
+				</h:panelGrid>
+				<rich:dataTable width="90%" id="tableProdutosSelecionados" rows="15" value="#{VendaMBean.produtosSelecionados}" var="venda" disabled="#{VendaMBean.inEditing}">
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column breakBefore="true" width="5px">
+							</rich:column>
+							<rich:column width="10px">
+								<h:outputText value="Código" />
+							</rich:column>
+							<rich:column >
+								<h:outputText value="Descrição" />
+							</rich:column>
+							<rich:column width="60px">
+								<h:outputText value="UN" />
+							</rich:column>
+							<rich:column width="20px">
+								<h:outputText value="QTD" />
+							</rich:column>
+							<rich:column width="80px">
+								<h:outputText value="Valor Unitário" />
+							</rich:column>
+							<rich:column width="80px">
+								<h:outputText value="Valor Total" />
+							</rich:column>
+							<rich:column width="20px">
+                        		<h:outputText value="Ação" />
+                    		</rich:column>  
+						</rich:columnGroup>
+					</f:facet>
+					<rich:column style="text-align:center">					
+						<h:outputText value="#{venda.identificador}" />
+					</rich:column>
+					<rich:column style="text-align:center">					
+						<h:outputText value="#{venda.produto.idProduto}" id="idProdutoSelecionadoVenda"/>
+						<h:outputText value="#{venda.receita.idReceita}" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="#{venda.descricao}" />
+					</rich:column>
+					<rich:column width="10px">
+						<h:outputText value="#{venda.unidade}" />
+					</rich:column>
+					<rich:column width="10px" >
+						<rich:inplaceInput   id="quantidade" defaultLabel="Quantidade" value="#{venda.quantidade}" >
+		   					<a4j:support ajaxSingle="true"  event="onviewactivated" action="#{VendaMBean.somaTotalProdutos}" reRender="tableProdutosSelecionados, totalVenda"/>
+		  				</rich:inplaceInput>
+					</rich:column>
+					<rich:column width="10px" style="text-align:center;">
+						<h:outputText value="#{venda.precoUnitario}">
+							<f:convertNumber   pattern="R$ ###,###.00" maxFractionDigits="2" />
+						</h:outputText>
+					</rich:column>
+					<rich:column style="text-align:center;">
+						<h:outputText value="#{venda.precoTotal}" id="precoTotal" >
+						<f:convertNumber   pattern="R$ ###,###.00" maxFractionDigits="2" />
+						</h:outputText>
+					</rich:column>
+					<rich:column width="30">
+						<a4j:commandLink id="btnDeleteProdutoSelecionado" actionListener="#{VendaMBean.listenerRemoveItemList}"
+								reRender="tableProdutosSelecionados, totalProdutosVenda, totalVenda" immediate="true">
+								<h:graphicImage value="/images/icons/delete.gif" 
+									style="cursor:pointer; border:0" id="hidelinkdelete" title="Remover" />
+								<f:param id="paramDelete" name="paramDelete" value="#{venda}" />
+							</a4j:commandLink>
+					</rich:column>
+		   			<f:facet name="footer">
+		   				<rich:columnGroup >
+		   					<rich:column colspan="4" breakBefore="true" style="text-align:center">
+		   						<a4j:commandButton style="color:#000000" value="Selecionar Produto" id="btnSelecionarProduto" disabled="#{VendaMBean.inEditing}" immediate="true">
+            						<rich:componentControl for="selecionarProdutoVenda" attachTo="btnSelecionarProduto" operation="show" event="onclick"/>
+            					</a4j:commandButton>
+		   						<a4j:commandButton style="color:#000000" value="Selecionar Receita" id="btnSelecionarReceita" disabled="#{VendaMBean.inEditing}" immediate="true">
+            						<rich:componentControl for="selecionarReceita" attachTo="btnSelecionarReceita" operation="show" event="onclick"/>
+            					</a4j:commandButton>
+		   					</rich:column>
+		   					<rich:column colspan="2" style="text-align:center">
+		   						<h:outputText value="Desconto"/>
+		   					</rich:column>
+		   					<rich:column style="text-align:center" >
+		   						<rich:inplaceInput   id="desconto" defaultLabel="desconto" value="#{VendaMBean.venda.desconto}" >
+									<f:convertNumber   pattern="###,###.##" integerOnly="false" maxFractionDigits="2" />
+		   							<a4j:support ajaxSingle="true"  event="onviewactivated" action="#{VendaMBean.calculaDesconto}" reRender="tableProdutosSelecionados, totalVenda"/>
+		  						</rich:inplaceInput>
+		   					</rich:column>
+		   					<rich:column style="text-align:center;" colspan="1">
+		   					</rich:column>
+		   					<rich:column colspan="6" breakBefore="true" style="text-align:center">
+		   						<h:outputText value="Total Geral"/>
+		   					</rich:column>
+		   					<rich:column style="text-align:center" >
+		   						<h:outputText  value="#{VendaMBean.venda.totalProdutos}">
+		   							<f:convertNumber   pattern="R$ ###,###.00" maxFractionDigits="2" />
+		   						</h:outputText>
+		   					</rich:column>
+		   					<rich:column style="text-align:center;" colspan="3">
+		   					</rich:column>
+		   				</rich:columnGroup>
+		   			</f:facet>
+				</rich:dataTable>
+				
+			<br/>
+			<br/>
+			<center>
+				<h:panelGrid columns="2">
+                     <font size="6" style="font-weight: bold;"><span style="font-family: verdana,arial,helvetica,sans-serif;">Total da Nota = </span></font>
+                     <h:outputText style="font-weight: bold; font-size: 32px; font-family: verdana,arial,helvetica,sans-serif; " value="#{VendaMBean.venda.totalVenda}" id="totalVenda" readonly="true">
+                     	<f:convertNumber   pattern="R$ ###,###.00" maxFractionDigits="2" />
+                     </h:outputText>
+				</h:panelGrid>
+			</center>	
+				<h:panelGrid columns="2">
+					<h:outputText value="Observações" />
+					<h:inputTextarea style="font-size: 10pt;" cols="70" rows="2" id="observacao" value="#{VendaMBean.venda.obs}" label="Observações" disabled="#{ClienteMBean.inEditing}" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns="4">
+					<h:outputText value="Condição de Pagamento" />
+					<h:inputText size="5" value="#{VendaMBean.condicaoPagamentoVenda.idCondicaoPagamento}" id="idCondicaoPagamentoVenda" required="false" requiredMessage="Cliente é Obrigatório!" disabled="#{VendaMBean.inEditing}"/>
+					<h:inputText size="60" value="#{VendaMBean.condicaoPagamentoVenda.descricao}" id="descricaoCondicaoPagamentoVenda" readonly="true" disabled="#{VendaMBean.inEditing}" style="FONT-FAMILY: 'AlYarmook';">
+					</h:inputText>
+					<a4j:commandButton style="color:#000000" value="Selecionar Condição Pagamento" id="btnSelecionarCondicaoPagamento" disabled="#{VendaMBean.inEditing}">
+                    	<rich:componentControl for="selecionarCondicaoPagamentoVenda" attachTo="btnSelecionarCondicaoPagamento" operation="show" event="onclick"/>
+                    	<a4j:support action="#{VendaMBean.listenerGeraParcelasPagamento}" event="click" ajaxSingle="true" reRender="listaRegistro, manterVenda" />
+                    </a4j:commandButton>
+				</h:panelGrid>
+				<br/>
+				<rich:dataTable id="listaRegistro" style="width:65%" var="contasReceber" value="#{VendaMBean.contasReceber}" disabled="#{VendaMBean.inEditing}">
+   		    		<f:facet name="header">
+               			<rich:columnGroup>
+                			<rich:column >
+                				<h:outputText value="Vencimento"/>
+                			</rich:column>
+			                <rich:column>
+			                	<h:outputText value="Numero do Documento"/>
+			                </rich:column>
+			                <rich:column>
+			                	<h:outputText value="Valor Parcela"/>
+			                </rich:column>
+			   			</rich:columnGroup>
+		   			</f:facet>
+		   			<rich:column>
+		   				<rich:calendar value="#{contasReceber.dataVencimento}" datePattern="dd/MM/yyyy"/>
+		   			</rich:column>
+		   			<rich:column>
+		   				<!--<h:inputHidden value="#{contasReceber.idContaReceber}" />-->
+		   				<h:inputText value="#{contasReceber.numeroDocumento}"/>
+		   			</rich:column>
+		   			<rich:column>
+		   				<h:inputText value="#{contasReceber.valor}">
+		   					<f:convertNumber   pattern="R$ ###,###.00" maxFractionDigits="2" />
+		   				</h:inputText>
+		   			</rich:column>
+		   		</rich:dataTable>
+		   		<br/>
+		   		<br/>
+				<a4j:commandButton action="#{VendaMBean.listAll}"
+					actionListener="#{VendaMBean.listenerSave}" value="Grava"
+					id="buttonSaveVenda" reRender="tableVenda"
+					disabled="#{VendaMBean.inEditing}">
+				</a4j:commandButton>
+				<a4j:commandButton action="#{VendaMBean.listAll}"
+					actionListener="#{VendaMBean.listenerDelete}" value="Cancelar"
+					id="buttonDeleteVenda" reRender="tableVenda"
+					disabled="#{VendaMBean.showButton}" />
+		</rich:panel> 
+		
+		</a4j:form>
+		</h:panelGroup>
+		<ui:include src="../cliente/selecionarCliente.xhtml" />
+		<ui:include src="../usuario/selecionarUsuario.xhtml" />
+		<ui:include src="../produto/selecionarProdutoVenda.xhtml" />
+		<ui:include src="../receita/selecionarReceita.xhtml" /> 
+		<ui:include src="../condicaoPagamento/selecionarCondicaoPagamentoVenda.xhtml" /> 
+	</ui:define>
+	
+</ui:composition>
+</html>

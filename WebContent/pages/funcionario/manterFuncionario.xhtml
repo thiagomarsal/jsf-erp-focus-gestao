@@ -1,0 +1,282 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:stella="http://stella.caelum.com.br/faces">
+	
+		<script>
+		    function setaCidade(id, nome, nomeEstado, nomePais, dddTelCidade, dddCelCidade){
+		    	document.getElementById('manterFuncionarioModal:idCidadeFuncionario').value = id;
+		        document.getElementById('manterFuncionarioModal:nomeCidadeFuncionario').value = nome;
+		        document.getElementById('manterFuncionarioModal:nomeEstadoFuncionario').value = nomeEstado;
+		        document.getElementById('manterFuncionarioModal:nomePaisFuncionario').value = nomePais;
+		        document.getElementById('manterFuncionarioModal:dddTelCidadeFuncionario').value = dddTelCidade;
+		        document.getElementById('manterFuncionarioModal:dddCelCidadeFuncionario').value = dddCelCidade;
+		    }
+		    function setaCargo(id, descricao){
+		    	document.getElementById('manterFuncionarioModal:idCargoFuncionario').value = id;
+		        document.getElementById('manterFuncionario:descricaoCargoFuncionario').value = descricao;
+		    }
+
+		    function setaUsuario(id, login){
+		    	document.getElementById('manterFuncionarioModal:idUsuarioFuncionario').value = id;
+		        document.getElementById('manterFuncionarioModal:loginUsuarioFuncionario').value = login;
+		    }
+		</script>
+		
+		<rich:modalPanel id="manterFuncionario" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter Funcionario" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkFuncionario" />
+				<rich:componentControl for="manterFuncionario" attachTo="hidelinkFuncionario"
+					operation="hide" event="onclick"/>
+			</h:panelGroup>
+		</f:facet>
+		
+			<rich:messages style="color: red; font-weight: bold;"></rich:messages>
+			<a4j:form id="manterFuncionarioModal" ajaxSubmit="true">
+				<h:panelGrid columns="2">
+					<h:outputText value="Código" />
+					<h:inputText size="10" value="#{FuncionarioMBean.funcionario.idFuncionario}" id="idFuncionario" readonly="true" />
+					<h:outputText value="Nome *" />
+					<h:inputText size="80" value="#{FuncionarioMBean.funcionario.nomeRazaoSocial}" id="nomeFuncionario" required="true"
+						requiredMessage="Nome é Obrigatório!"
+						disabled="#{FuncionarioMBean.inEditing}" maxlength="100">
+						<f:validateLength minimum="1" maximum="100" />
+					</h:inputText>
+					
+				</h:panelGrid>
+				<h:panelGrid columns="6">
+					<h:outputText value="CPF *" />
+					<h:inputText value="#{FuncionarioMBean.funcionario.cpfCnpj}" id="cpfFuncionario" required="true" requiredMessage="#CPF é Obrigatório!" 
+					maxlength="15" disabled="#{FuncionarioMBean.inEditing}" validatorMessage="CPF Invalido !!!">
+						<stella:validateCPF />
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+
+					<h:outputText value="RG *" />
+					<h:inputText value="#{FuncionarioMBean.funcionario.rgInscricao}" id="rgFuncionario" required="true" requiredMessage="RG é Obrigatório!"
+					 maxlength="15"	disabled="#{FuncionarioMBean.inEditing}">
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+					
+					<h:outputText value="CTPS *" />
+					<h:inputText value="#{FuncionarioMBean.funcionario.ctps}" id="ctpsFuncionario" required="true" requiredMessage="CTPS é Obrigatório!"
+					 disabled="#{FuncionarioMBean.inEditing}" validatorMessage="CTPS Invalido !!!">
+						<stella:validateNIT />
+					</h:inputText>
+				</h:panelGrid>
+				<h:panelGrid columns="6">
+					<h:outputText value="Sexo:" rendered="#{state.showSexo}" />
+					<h:selectOneRadio id="sexoFuncionario" value="#{FuncionarioMBean.funcionario.sexo}" disabled="#{FuncionarioMBean.inEditing}" rendered="#{state.showSexo}">
+                            <f:selectItem itemValue="Masculino" itemLabel="Masculino"/>
+                            <f:selectItem itemValue="Feminino" itemLabel="Feminino"/>
+                    </h:selectOneRadio>
+                    
+                    <h:outputText value="Estado Civil: *" rendered="#{state.showEstadoCivil}"/>
+                    <rich:comboBox defaultLabel="Selecione" value="#{FuncionarioMBean.funcionario.estadoCivil}" disabled="#{FuncionarioMBean.inEditing}" 
+                    			required="true" requiredMessage="Estado Civil é Obrigatório!" rendered="#{state.showEstadoCivil}">
+                         <f:selectItem itemValue="Solteiro" itemLabel="Solteiro"/>
+                         <f:selectItem itemValue="Casado" itemLabel="Casado"/>
+                         <f:selectItem itemValue="Divorciado" itemLabel="Divorciado"/>
+                         <f:selectItem itemValue="Viuvo" itemLabel="Viuvo"/>
+                         <f:selectItem itemValue="União Estavel" itemLabel="União Estavel"/>
+                     </rich:comboBox>
+                     <h:outputText value="Data Nascimento: *" rendered="#{state.showDtNascimento}" />
+                    <rich:calendar value="#{FuncionarioMBean.funcionario.dataNascimento}" id="dataNascimentoFuncionario" required="true"
+                                   popup="true" datePattern="dd/MM/yyyy" cellHeight="24px" cellWidth="22px" style="width:200px"
+                                   requiredMessage="Data de Nascimento Invalida!!!" disabled="#{FuncionarioMBean.inEditing}"
+                                   rendered="#{state.showDtNascimento}" enableManualInput="true">
+                    </rich:calendar>
+				</h:panelGrid>
+				<h:panelGrid columns="8">
+					<h:outputText value="Telefone: *" />
+					<h:inputText size="1" value="#{FuncionarioMBean.funcionario.cidade.ddd}" id="dddTelCidadeFuncionario" readonly="true" disabled="#{FuncionarioMBean.inEditing}" />
+					<h:inputText value="#{FuncionarioMBean.funcionario.telefone}" id="telefoneFuncionario" required="true" requiredMessage="Telefone é Obrigatório!"
+					 maxlength="15"	disabled="#{FuncionarioMBean.inEditing}">
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+
+					<h:outputText value="Celular: " />
+					<h:inputText size="1" value="#{FuncionarioMBean.funcionario.cidade.ddd}" id="dddCelCidadeFuncionario" readonly="true" disabled="#{FuncionarioMBean.inEditing}" />
+					<h:inputText value="#{FuncionarioMBean.funcionario.celular}" id="celularFuncionario" maxlength="15" disabled="#{FuncionarioMBean.inEditing}">
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+
+                     <h:outputText value="Email: "/>
+                     <h:inputText size="30" value="#{FuncionarioMBean.funcionario.email}" id="emailFuncionario" disabled="#{FuncionarioMBean.inEditing}" maxlength="40">
+                        <f:validateLength maximum="40" />
+                     </h:inputText>
+                     
+				</h:panelGrid>
+				
+				<h:panelGrid columns="4">
+					<h:outputText value="Salário *" />
+					<h:inputText value="#{FuncionarioMBean.funcionario.salario}" id="salarioFuncionario" required="true" requiredMessage="#Salário é Obrigatório!" 
+					maxlength="15" disabled="#{FuncionarioMBean.inEditing}">
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+
+					<h:outputText value="Comissão (%)" />
+					<h:inputText value="#{FuncionarioMBean.funcionario.comissao}" id="comissaoFuncionario" maxlength="5" disabled="#{FuncionarioMBean.inEditing}">
+						<f:validateLength minimum="1" maximum="5" />
+					</h:inputText>
+				</h:panelGrid>
+				<table>
+					<tr>
+						<td>
+							<fieldset class="demo_fieldset" style="width: 50%"><legend
+									class="demo_legend">Cargo *</legend> <h:panelGrid columns="2">
+									<h:inputText size="1"
+										value="#{FuncionarioMBean.cargoFuncionario.idCargo}"
+										id="idCargoFuncionario" disabled="#{FuncionarioMBean.inEditing}"
+										required="true" requiredMessage="Cargo é Obrigatório!">
+									</h:inputText>
+									<h:inputText size="15"
+										value="#{FuncionarioMBean.cargoFuncionario.descricao}"
+										id="descricaoCargoFuncionario"
+										disabled="#{FuncionarioMBean.inEditing}" />
+									<h:outputText value="" />
+									<a4j:commandLink style="color:#000000" value="Selecionar"
+										id="btnSelectCargo" disabled="#{FuncionarioMBean.showButton}">
+										<rich:componentControl for="selecionarCargo"
+											attachTo="btnSelectCargo" operation="show" event="onclick" />
+									</a4j:commandLink>
+								</h:panelGrid></fieldset>
+								</td>
+								<td>
+								<fieldset class="demo_fieldset" style="width: 50%"><legend
+									class="demo_legend">Usuário *</legend> <h:panelGrid columns="2">
+									<h:inputText size="1"
+										value="#{FuncionarioMBean.usuarioFuncionario.idUsuario}"
+										id="idUsuarioFuncionario" disabled="#{FuncionarioMBean.inEditing}">
+									</h:inputText>
+									<h:inputText size="15"
+										value="#{FuncionarioMBean.usuarioFuncionario.login}"
+										id="loginUsuarioFuncionario"
+										disabled="#{FuncionarioMBean.inEditing}" />
+									<h:outputText value="" />
+									<a4j:commandLink style="color:#000000" value="Selecionar"
+										id="btnSelectUsuario" disabled="#{FuncionarioMBean.showButton}">
+										<rich:componentControl for="selecionarUsuario"
+											attachTo="btnSelectUsuario" operation="show" event="onclick" />
+									</a4j:commandLink>
+								</h:panelGrid></fieldset>
+							</td>
+						</tr>
+					</table>
+						
+				<table>
+					<tr>
+						<td>
+						<fieldset class="demo_fieldset" style="width: 80%">
+						<legend	class="demo_legend">Endereço *</legend>
+						<h:panelGrid columns="4">
+							<h:outputText value="Logradouro:*" />
+                    		<h:inputText size="65" value="#{FuncionarioMBean.enderecoFuncionario.logradouro}" id="logradouroFuncionario" required="true" requiredMessage="Logradouro é Obrigatório" disabled="#{FuncionarioMBean.inEditing}" maxlength="60">
+                            	<f:validateLength maximum="60" />
+                        	</h:inputText>
+                        	
+                        	<h:outputText value="Numero: " />
+                    		<h:inputText  size="7" value="#{FuncionarioMBean.enderecoFuncionario.numeroPredial}" id="numeroPredialFuncionario" required="true" requiredMessage="Numero Predial é Obrigatório" disabled="#{FuncionarioMBean.inEditing}" maxlength="10">
+                            	<f:validateLength maximum="10" />
+                        	</h:inputText>
+                        </h:panelGrid>	
+                        
+ 						<h:panelGrid columns="7">
+                    		<h:outputText value="Bairro: *" />
+                    		<h:inputText value="#{FuncionarioMBean.enderecoFuncionario.bairro}" id="bairroFuncionario" required="true" requiredMessage="Bairro é Obrigatório!" disabled="#{FuncionarioMBean.inEditing}" maxlength="40">
+                            <f:validateLength maximum="40" />
+                        </h:inputText>
+
+                    	<h:outputText value="Cidade: *" />
+                    	<h:inputText size="1" value="#{FuncionarioMBean.cidadeFuncionario.idCidade}" id="idCidadeFuncionario" disabled="#{FuncionarioMBean.inEditing}"/>
+                        <h:inputText size="16" value="#{FuncionarioMBean.cidadeFuncionario.nome}" id="nomeCidadeFuncionario" readonly="true" disabled="#{FuncionarioMBean.inEditing}"/>
+                        <a4j:commandLink style="color:#000000" value="Selecionar Cidade" id="btnSelecionar" disabled="#{FuncionarioMBean.showButton}">
+                            <rich:componentControl for="selecionarCidade" attachTo="btnSelecionar" operation="show" event="onclick"/>
+                        </a4j:commandLink>
+						
+						</h:panelGrid>
+					<h:panelGrid columns="6">
+                   <h:outputText value="Estado: " />
+                   <h:inputText size="16" value="#{FuncionarioMBean.funcionario.cidade.estado.nome}" id="nomeEstadoFuncionario" readonly="true" disabled="#{FuncionarioMBean.inEditing}"/>
+
+                   <h:outputText value="Pais: " />
+                   <h:inputText size="16" value="#{FuncionarioMBean.funcionario.cidade.estado.pais.nome}" id="nomePaisFuncionario" readonly="true" disabled="#{FuncionarioMBean.inEditing}"/>
+
+                   <h:outputText value="CEP: " />
+                   <h:inputText value="#{FuncionarioMBean.enderecoFuncionario.cep}" id="cepFuncionario" disabled="#{FuncionarioMBean.inEditing}" maxlength="10">
+                            <f:validateLength maximum="10" />
+                   </h:inputText>
+                   </h:panelGrid>
+                   
+                   <h:panelGrid columns="2">
+		           	<h:outputText value="Complemento: " />
+        		    <h:inputText size="80" value="#{FuncionarioMBean.enderecoFuncionario.complemento}" id="complementoFuncionario" disabled="#{FuncionarioMBean.inEditing}" maxlength="100">
+                    	<f:validateLength maximum="100" />
+                   	</h:inputText>
+          		   </h:panelGrid>
+						</fieldset>
+						</td>
+					</tr>
+				</table>
+				<h:panelGrid columns="2">
+					<h:outputText value="Observações" />
+					<h:inputTextarea style="font-size: 10pt;" cols="70" rows="2" id="observacao" value="#{FuncionarioMBean.funcionario.obs}" label="Observações" disabled="#{FuncionarioMBean.inEditing}" />
+				</h:panelGrid>
+				<h:panelGrid columns="4">                    
+                    <h:outputText value="Data de Admissão: *"/>
+                    <rich:calendar value="#{FuncionarioMBean.funcionario.dataAdmissao}" id="dataAdmissaoFuncionario" required="true"
+                                   popup="true" datePattern="dd/MM/yyyy" cellHeight="24px" cellWidth="22px" style="width:200px"
+                                   requiredMessage="Data de Admissão é Obrigatória!" disabled="#{FuncionarioMBean.inEditing}" enableManualInput="true">
+                    </rich:calendar>
+                    
+                    <h:outputText value="Data de Demissão:" />
+                    <rich:calendar value="#{FuncionarioMBean.funcionario.dataDemissao}" id="dataDemissaoFuncionario"
+                                   popup="true" datePattern="dd/MM/yyyy" cellHeight="24px" cellWidth="22px" style="width:200px"
+                                   disabled="#{FuncionarioMBean.inEditing}" enableManualInput="true">
+                    </rich:calendar>
+                    <h:outputText value="Data de Cadastro: " />
+                    <h:inputText  value="#{FuncionarioMBean.funcionario.dataCadastro}" id="dataCadastroFuncionario" readonly="true" disabled="#{FuncionarioMBean.inEditing}" maxlength="10">
+                       <f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+                    </h:inputText>
+                    
+                    <h:outputText value="Data de Atualização: " />
+                    <h:inputText  value="#{FuncionarioMBean.funcionario.dataAtualizacao }" id="dataAtualizacaoFuncionario" readonly="true" disabled="#{FuncionarioMBean.inEditing}" maxlength="10">
+                       <f:convertDateTime  type="date" pattern="dd/MM/yyyy"/>
+                    </h:inputText>
+				</h:panelGrid>
+				<a4j:commandButton action="#{FuncionarioMBean.listAll}"
+					actionListener="#{FuncionarioMBean.listenerSave}" value="Grava"
+					id="buttonSaveFuncionario" reRender="tableFuncionario, manterFuncionarioModal"
+					disabled="#{FuncionarioMBean.inEditing}">
+				</a4j:commandButton>
+				<a4j:commandButton action="#{FuncionarioMBean.listAll}"
+					actionListener="#{FuncionarioMBean.listenerDelete}" value="Exclui"
+					id="buttonDeleteFuncionario" reRender="tableFuncionario, manterFuncionarioModal"
+					disabled="#{FuncionarioMBean.showButton}"/>
+		
+		</a4j:form>
+		</rich:modalPanel>
+		<ui:include src="../cidade/selecionarCidade.xhtml" /> 
+		<ui:include src="../cargo/selecionarCargo.xhtml" />
+		<ui:include src="../usuario/selecionarUsuario.xhtml" /> 
+	
+</ui:composition>

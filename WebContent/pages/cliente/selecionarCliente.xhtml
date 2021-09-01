@@ -1,0 +1,122 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<f:subview id="selecionarClienteModal">
+    <rich:modalPanel id="selecionarCliente" autosized="true" minWidth="500">
+    <f:facet name="header">
+            <h:outputText value="Selecionar Cliente" />
+        </f:facet>
+        <f:facet name="controls">
+            <h:panelGroup>
+                <h:graphicImage value="/images/modal/close.png" style="cursor:pointer" id="hidelinkSelecionarCliente" />
+                <rich:componentControl for="selecionarCliente" attachTo="hidelinkSelecionarCliente" operation="hide" event="onclick"/>
+            </h:panelGroup>
+        </f:facet>
+        <br/>
+		<center><a4j:form>
+			<h:panelGrid columns="3">
+				<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Nome / Razao Social:" />
+				<h:inputText value="#{ClienteMBean.clienteSearch.nomeRazaoSocial}">
+					<a4j:support event="onkeyup" action="#{ClienteMBean.searchByParameter}" actionListener="#{ClienteMBean.listenerSearchByParameter}" reRender="tableCliente, scCliente"/>
+				</h:inputText>
+				<a4j:commandButton value="Refresh" action="#{ClienteMBean.searchByParameter}" actionListener="#{ClienteMBean.listenerSearchByParameter}" reRender="tableCliente, scCliente">
+					<f:param id="paramSearch" name="paramSearch" value="#{ClienteMBean.clienteSearch.nomeRazaoSocial}" />
+				</a4j:commandButton>
+			</h:panelGrid>
+			<br/>
+			<br/>
+			<a4j:commandLink style="color : #000000;" value="Inserir" id="btnSaveCliente" actionListener="#{ClienteMBean.listenerScreenSave}" reRender="manterClienteModal">
+				<rich:componentControl for="manterCliente" attachTo="btnSaveCliente" operation="show" event="onclick" />
+			</a4j:commandLink>
+			<br/>
+			<br/>
+			<rich:dataTable width="500" id="tableCliente" rows="10" value="#{ClienteMBean.clientes}" var="cliente">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column>
+						<h:outputText value="Código" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Nome/Razão Social" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="CPF/CNPJ" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Telefone" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Celular" />
+					</rich:column>
+					<rich:column colspan="2" width="30px">
+						<h:outputText value="Ação" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column style="text-align:center" sortBy="#{cliente.idCliente}" filterBy="#{cliente.idCliente}" filterEvent="onkeyup">
+               	<f:facet name="header">
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+                <h:outputText value="#{cliente.idCliente}"/>
+            </rich:column> 
+            <rich:column sortBy="#{cliente.nomeRazaoSocial}" filterBy="#{cliente.nomeRazaoSocial}" filterEvent="onkeyup">
+                <h:outputText value="#{cliente.nomeRazaoSocial}"/> 
+            </rich:column>
+            <rich:column style="text-align:center" sortBy="#{cliente.cpfCnpj}" filterBy="#{cliente.cpfCnpj}" filterEvent="onkeyup">
+                <h:outputText value="#{cliente.cpfCnpj}"/> 
+            </rich:column>
+            <rich:column style="text-align:center" sortBy="#{cliente.telefone}" filterBy="#{cliente.telefone}" filterEvent="onkeyup">
+                <h:outputText value="#{cliente.telefone}"/> 
+            </rich:column>
+            <rich:column style="text-align:center" sortBy="#{cliente.celular}" filterBy="#{cliente.celular}" filterEvent="onkeyup">
+                <h:outputText value="#{cliente.celular}"/> 
+            </rich:column>
+            <rich:column style="text-align:center" width="30px">
+				<f:facet  name="header" >
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+				<a4j:commandLink id="btnUpdateCliente" action="#{ClienteMBean.listAll}" actionListener="#{ClienteMBean.listenerUpdate}" oncomplete="Richfaces.showModalPanel('manterCliente');"
+								     reRender="manterClienteModal ">
+						<h:graphicImage value="/images/icons/edit.gif" style="cursor:pointer; border:0;" id="hidelinkedit" title="Editar"/>
+						<f:param id="paramUpdate" name="paramUpdate" value="#{cliente.idCliente}" />
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<f:facet  name="header" >
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+					<a4j:commandLink id="btnSelectCliente" actionListener="#{ClienteMBean.listenerScreenModal}"
+                        			oncomplete="setaCliente('#{cliente.idCliente}','#{cliente.nomeRazaoSocial}'); Richfaces.hideModalPanel('selecionarCliente');">
+                            <h:graphicImage value="/images/icons/open.gif" style="cursor:pointer; border:0" id="hidelinkselectCliente" title="Selecionar" />
+                            <f:param id="paramModal" name="paramModal" value="#{cliente.idCliente}"/>
+                        </a4j:commandLink>
+				</rich:column>
+				<f:facet name="footer">
+		   				<rich:columnGroup >
+		   					<rich:column colspan="7" breakBefore="true" style="text-align:center">
+		   						<rich:datascroller align="center" for="tableCliente" maxPages="30" page="#{ClienteMBean.scrollerPage}" id="scCliente" renderIfSinglePage="false"/>
+		   					</rich:column>
+		   				</rich:columnGroup>
+		   			</f:facet>
+			</rich:dataTable> 
+		</a4j:form></center>
+	</rich:modalPanel>
+	</f:subview>
+	<ui:include src="manterCliente.xhtml"/>
+</ui:composition>

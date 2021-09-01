@@ -1,0 +1,59 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:modalPanel id="manterMaterial" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter Material" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkMaterial" />
+				<rich:componentControl for="manterMaterial"
+					attachTo="hidelinkMaterial" operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		<br />
+		<rich:messages style="color: red; font-weight: bold;" />
+		<a4j:form id="manterMaterialModal" ajaxSubmit="true"
+			reRender="idMaterial, descricaoMaterial">
+			<h:panelGrid columns="2">
+
+				<h:outputText value="Código" />
+				<h:inputText value="#{MaterialMBean.material.idMaterial}"
+					id="idMaterial" readonly="true" />
+
+				<h:outputText value="Descrição*" />
+				<h:inputText value="#{MaterialMBean.material.descricao}"
+					id="descricaoMaterial" required="true"
+					requiredMessage="Descrição é Obrigatória!"
+					disabled="#{MaterialMBean.inEditing}" maxlength="30">
+					<f:validateLength minimum="1" maximum="30" />
+				</h:inputText>
+			</h:panelGrid>
+			<a4j:commandButton action="#{MaterialMBean.listAll}"
+				actionListener="#{MaterialMBean.listenerSave}" value="Grava"
+				id="buttonSaveMaterial" reRender="tableMaterial"
+				disabled="#{MaterialMBean.inEditing}" />
+			<a4j:commandButton action="#{MaterialMBean.listAll}"
+				actionListener="#{MaterialMBean.listenerDelete}" value="Exclui"
+				id="buttonDeleteMaterial" reRender="tableMaterial"
+				disabled="#{MaterialMBean.showButton}" />
+		</a4j:form>
+	</rich:modalPanel>
+</ui:composition>

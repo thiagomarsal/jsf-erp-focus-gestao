@@ -1,0 +1,318 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:stella="http://stella.caelum.com.br/faces">
+
+	<script>
+    function setaMarca(idMarca, descricaoMarca){
+        document.getElementById('manterProdutoModal:idMarcaProduto').value = idMarca;
+        document.getElementById('manterProdutoModal:descricaoMarcaProduto').value = descricaoMarca;
+    }
+    function setaModelo(idModelo, descricaoModelo){
+        document.getElementById('manterProdutoModal:idModeloProduto').value = idModelo;
+        document.getElementById('manterProdutoModal:descricaoModeloProduto').value = descricaoModelo;
+    }
+    function setaUnidade(idUnidade, descricaoUnidade){
+        document.getElementById('manterProdutoModal:idUnidadeProduto').value = idUnidade;
+        document.getElementById('manterProdutoModal:descricaoUnidadeProduto').value = descricaoUnidade;
+    }
+    function setaCor(idCor, descricaoCor){
+        document.getElementById('manterProdutoModal:idCorProduto').value = idCor;
+        document.getElementById('manterProdutoModal:descricaoCorProduto').value = descricaoCor;
+    }
+    function setaGrupo(idGrupo, descricaoGrupo){
+        document.getElementById('manterProdutoModal:idGrupoProduto').value = idGrupo;
+        document.getElementById('manterProdutoModal:descricaoGrupoProduto').value = descricaoGrupo;
+    }
+    function setaLinha(idLinha, descricaoLinha){
+        document.getElementById('manterProdutoModal:idLinhaProduto').value = idLinha;
+        document.getElementById('manterProdutoModal:descricaoLinhaProduto').value = descricaoLinha;
+    }
+    function setaTipo(idTipo, descricaoTipo){
+        document.getElementById('manterProdutoModal:idTipoProduto').value = idTipo;
+        document.getElementById('manterProdutoModal:descricaoTipoProduto').value = descricaoTipo;
+    }
+    function setaMaterial(idMaterial, descricaoMaterial){
+        document.getElementById('manterProdutoModal:idMaterialProduto').value = idMaterial;
+        document.getElementById('manterProdutoModal:descricaoMaterialProduto').value = descricaoMaterial;
+    }
+</script>
+ 
+<rich:modalPanel id="manterProduto" autosized="true">
+		<f:facet name="header">
+            <h:outputText value="Manter Produto" />
+        </f:facet>
+        <f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkProduto" />
+				<rich:componentControl for="manterProduto" attachTo="hidelinkProduto"
+					operation="hide" event="onclick"/>
+			</h:panelGroup>
+		</f:facet>
+			<rich:messages style="color: red; font-weight: bold;"></rich:messages>
+			<a4j:form id="manterProdutoModal" ajaxSubmit="true">
+				<h:panelGrid columns="3">
+					<h:outputText value="Produto*" />
+					<h:inputText size="10" value="#{ProdutoMBean.produto.idProduto}"
+						id="idProduto" readonly="true" />
+					<h:inputText size="85" value="#{ProdutoMBean.produto.descricao}"
+						id="descricaoProduto" required="true"
+						requiredMessage="Produto é Obrigatório!"
+						disabled="#{ProdutoMBean.inEditing}" maxlength="100">
+						<f:validateLength minimum="1" />
+					</h:inputText>
+				</h:panelGrid>
+				<h:panelGrid columns="6">
+					<h:outputText value="Referencia" />
+					<h:inputText value="#{ProdutoMBean.produto.referencia}"
+						id="referenciaProduto" maxlength="15"
+						disabled="#{ProdutoMBean.inEditing}">
+						<f:validateLength minimum="1"/>
+					</h:inputText>
+					<h:outputText value="Estoque" />
+					<h:inputText value="#{ProdutoMBean.produto.estoque}"
+						id="estoqueProduto" readonly="true" maxlength="4"
+						disabled="#{ProdutoMBean.inEditing}">
+					</h:inputText>
+					<h:outputText value="" />
+					<h:outputText value="" />
+					<h:outputText value="Preço Custo" />
+					<h:inputText value="#{ProdutoMBean.produto.precoCusto}" id="precoCustoProduto" readonly="true"
+						disabled="#{ProdutoMBean.inEditing}">
+					</h:inputText>
+
+					<h:outputText value="Acréscimo (%)*" />
+					<h:inputText value="#{ProdutoMBean.produto.acrescimo}"
+						id="acrescimoProduto" required="true"
+						requiredMessage="Acréscimo é Obrigatório!" maxlength="3"
+						disabled="#{ProdutoMBean.inEditing}">
+						<f:validateLength minimum="1" />
+					</h:inputText>
+					
+					<h:outputText value="Preço Venda" />
+					<h:inputText value="#{ProdutoMBean.produto.precoVenda}" id="precoVendaProduto" readonly="true" 
+						disabled="#{ProdutoMBean.inEditing}">
+					</h:inputText>
+
+				</h:panelGrid>
+				<table>
+					<tr>
+						<td>
+						<fieldset class="demo_fieldset" style="width: 30%"><legend
+							class="demo_legend">Marca *</legend>
+						<h:panelGrid columns="2">
+							<h:inputText size="1"
+								value="#{ProdutoMBean.marcaProduto.idMarca}" id="idMarcaProduto"
+								disabled="#{ProdutoMBean.inEditing}" required="true"
+								requiredMessage="Marca é Obrigatório!">
+							</h:inputText>
+							<h:inputText size="15"
+								value="#{ProdutoMBean.marcaProduto.descricao}" readonly="true"
+								id="descricaoMarcaProduto" disabled="#{ProdutoMBean.inEditing}" />
+							<h:outputText value="" />
+							<a4j:commandLink style="color:#000000" value="Selecionar" id="btnSelectMarca"
+								disabled="#{ProdutoMBean.showButton}">
+								<rich:componentControl for="selecionarMarca"
+									attachTo="btnSelectMarca" operation="show" event="onclick" />
+							</a4j:commandLink>
+						</h:panelGrid>
+						</fieldset>
+						</td>
+						<td>
+						<fieldset class="demo_fieldset" style="width: 30%"><legend
+							class="demo_legend">Modelo *</legend>
+						<h:panelGrid columns="2">
+							<h:inputText size="1"
+								value="#{ProdutoMBean.modeloProduto.idModelo}"
+								id="idModeloProduto" disabled="#{ProdutoMBean.inEditing}"
+								required="true" requiredMessage="Modelo é Obrigatório!">
+							</h:inputText>
+							<h:inputText size="15" readonly="true"
+								value="#{ProdutoMBean.modeloProduto.descricao}"
+								id="descricaoModeloProduto" disabled="#{ProdutoMBean.inEditing}" />
+							<h:outputText value="" />
+							<a4j:commandLink style="color:#000000" value="Selecionar" id="btnSelectModelo"
+								disabled="#{ProdutoMBean.showButton}">
+								<rich:componentControl for="selecionarModelo"
+									attachTo="btnSelectModelo" operation="show" event="onclick" />
+							</a4j:commandLink>
+						</h:panelGrid>
+						</fieldset>
+						</td>
+						<td>
+						<fieldset class="demo_fieldset" style="width: 30%" ><legend
+							class="demo_legend">Unidade *</legend>
+						<h:panelGrid columns="2">
+							<h:inputText size="1"
+								value="#{ProdutoMBean.unidadeProduto.idUnidade}"
+								id="idUnidadeProduto"
+								disabled="#{ProdutoMBean.inEditing}" required="true"
+								requiredMessage="Unidade é Obrigatório!">
+							</h:inputText>
+							<h:inputText size="15" readonly="true"
+								value="#{ProdutoMBean.unidadeProduto.descricao}"
+								id="descricaoUnidadeProduto"
+								disabled="#{ProdutoMBean.inEditing}" />
+								<h:outputText value="" />
+							<a4j:commandLink style="color:#000000" value="Selecionar" id="btnSelectUnidade"
+								disabled="#{ProdutoMBean.showButton}">
+								<rich:componentControl for="selecionarUnidade"
+									attachTo="btnSelectUnidade" operation="show"
+									event="onclick" />
+							</a4j:commandLink>
+						</h:panelGrid>
+						</fieldset>
+						</td>
+						<td>
+						<fieldset class="demo_fieldset" style="width: 30%" ><legend
+							class="demo_legend">Linha *</legend>
+						<h:panelGrid columns="2">
+							<h:inputText size="1"
+								value="#{ProdutoMBean.linhaProduto.idLinha}"
+								id="idLinhaProduto"
+								disabled="#{ProdutoMBean.inEditing}" required="true"
+								requiredMessage="Linha é Obrigatório!">
+							</h:inputText>
+							<h:inputText size="15" readonly="true"
+								value="#{ProdutoMBean.linhaProduto.descricao}"
+								id="descricaoLinhaProduto"
+								disabled="#{ProdutoMBean.inEditing}" />
+								<h:outputText value="" />
+							<a4j:commandLink style="color:#000000" value="Selecionar" id="btnSelectLinha"
+								disabled="#{ProdutoMBean.showButton}">
+								<rich:componentControl for="selecionarLinha"
+									attachTo="btnSelectLinha" operation="show"
+									event="onclick" />
+							</a4j:commandLink>
+						</h:panelGrid>
+						</fieldset>
+						</td>
+						</tr>
+						<tr>
+							<td>
+						<fieldset class="demo_fieldset" ><legend
+							class="demo_legend">Cor *</legend>
+						<h:panelGrid columns="2">
+							<h:inputText size="1" value="#{ProdutoMBean.corProduto.idCor}"
+								id="idCorProduto" disabled="#{ProdutoMBean.inEditing}"
+								required="true" requiredMessage="Cor é Obrigatório!">
+							</h:inputText>
+							<h:inputText size="15" readonly="true"
+								value="#{ProdutoMBean.corProduto.descricao}"
+								id="descricaoCorProduto" disabled="#{ProdutoMBean.inEditing}" />
+								<h:outputText value="" />
+							<a4j:commandLink style="color:#000000" value="Selecionar" id="btnSelectCor"
+								disabled="#{ProdutoMBean.showButton}">
+								<rich:componentControl for="selecionarCor"
+									attachTo="btnSelectCor" operation="show" event="onclick" />
+							</a4j:commandLink>
+						</h:panelGrid>
+						</fieldset>
+						</td>
+						<td>
+						<fieldset class="demo_fieldset" ><legend
+							class="demo_legend">Grupo *</legend>
+						<h:panelGrid columns="2">
+							<h:inputText size="1"
+								value="#{ProdutoMBean.grupoProduto.idGrupo}" id="idGrupoProduto"
+								disabled="#{ProdutoMBean.inEditing}" required="true"
+								requiredMessage="Grupo é Obrigatório!">
+							</h:inputText>
+							<h:inputText size="15" readonly="true"
+								value="#{ProdutoMBean.grupoProduto.descricao}"
+								id="descricaoGrupoProduto" disabled="#{ProdutoMBean.inEditing}" />
+								<h:outputText value="" />
+							<a4j:commandLink style="color:#000000" value="Selecionar" id="btnSelectGrupo"
+								disabled="#{ProdutoMBean.showButton}">
+								<rich:componentControl for="selecionarGrupo"
+									attachTo="btnSelectGrupo" operation="show" event="onclick" />
+							</a4j:commandLink>
+						</h:panelGrid>
+						</fieldset>
+							</td>
+						<td>
+						<fieldset class="demo_fieldset" ><legend
+							class="demo_legend">Tipo *</legend>
+						<h:panelGrid columns="2">
+							<h:inputText size="1"
+								value="#{ProdutoMBean.tipoProduto.idTipo}" id="idTipoProduto"
+								disabled="#{ProdutoMBean.inEditing}" required="true"
+								requiredMessage="Tipo é Obrigatório!">
+							</h:inputText>
+							<h:inputText size="15" readonly="true"
+								value="#{ProdutoMBean.tipoProduto.descricao}"
+								id="descricaoTipoProduto" disabled="#{ProdutoMBean.inEditing}" />
+								<h:outputText value="" />
+							<a4j:commandLink style="color:#000000" value="Selecionar" id="btnSelectTipo"
+								disabled="#{ProdutoMBean.showButton}">
+								<rich:componentControl for="selecionarTipo"
+									attachTo="btnSelectTipo" operation="show" event="onclick" />
+							</a4j:commandLink>
+						</h:panelGrid>
+						</fieldset>
+						</td>
+						<td>
+						<fieldset class="demo_fieldset" ><legend
+							class="demo_legend">Material *</legend>
+						<h:panelGrid columns="2">
+							<h:inputText size="1"
+								value="#{ProdutoMBean.materialProduto.idMaterial}" id="idMaterialProduto"
+								disabled="#{ProdutoMBean.inEditing}" required="true"
+								requiredMessage="Material é Obrigatório!">
+							</h:inputText>
+							<h:inputText size="15" readonly="true"
+								value="#{ProdutoMBean.materialProduto.descricao}"
+								id="descricaoMaterialProduto" disabled="#{ProdutoMBean.inEditing}" />
+								<h:outputText value="" />
+							<a4j:commandLink style="color:#000000" value="Selecionar" id="btnSelectMaterial"
+								disabled="#{ProdutoMBean.showButton}">
+								<rich:componentControl for="selecionarMaterial"
+									attachTo="btnSelectMaterial" operation="show" event="onclick" />
+							</a4j:commandLink>
+						</h:panelGrid>
+						</fieldset>
+						</td>
+					</tr>
+				</table>
+				<h:panelGrid columns="3">
+					<h:outputText value="Observações" />
+					<h:inputTextarea cols="66" rows="2" id="observacao"
+						value="#{ProdutoMBean.produto.obs}" label="Observações" />
+				</h:panelGrid>
+
+				<a4j:commandButton action="#{ProdutoMBean.listAll}"
+					actionListener="#{ProdutoMBean.listenerSave}" value="Grava"
+					id="buttonSave" reRender="tableProduto, precoVendaProduto, manterProdutoModal "
+					disabled="#{ProdutoMBean.inEditing}">
+
+				</a4j:commandButton>
+				<a4j:commandButton action="#{ProdutoMBean.listAll}"
+					actionListener="#{ProdutoMBean.listenerDelete}" value="Exclui"
+					id="buttonDelete" reRender="tableProduto, manterProdutoModal"
+					disabled="#{ProdutoMBean.showButton}"/>
+			</a4j:form>
+		</rich:modalPanel> 
+		<ui:include src="../marca/selecionarMarca.xhtml" /> 
+		<ui:include src="../modelo/selecionarModelo.xhtml" /> 
+		<ui:include	src="../unidade/selecionarUnidade.xhtml" /> 
+		<ui:include	src="../cor/selecionarCor.xhtml" /> 
+		<ui:include	src="../grupo/selecionarGrupo.xhtml" /> 
+		<ui:include	src="../linha/selecionarLinha.xhtml" />
+		<ui:include	src="../tipo/selecionarTipo.xhtml" />
+		<ui:include	src="../material/selecionarMaterial.xhtml" />
+</ui:composition>

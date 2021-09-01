@@ -1,0 +1,115 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:panel>
+	<f:facet name="header">
+	            <h:outputText value="Contas a Pagar" />
+	        </f:facet>
+		<center><a4j:form>
+			<h:panelGrid columns="3">
+				<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Número do Documento:" />
+				<h:inputText value="#{ContaPagarMBean.contaPagarSearch.numeroDocumento}">
+					<a4j:support event="onkeyup" action="#{ContaPagarMBean.searchByParameter}" actionListener="#{ContaPagarMBean.listenerSearchByParameter}" reRender="tableContaPagar, scContaPagar"/>
+				</h:inputText>
+				<a4j:commandButton value="Refresh" action="#{ContaPagarMBean.searchByParameter}" actionListener="#{ContaPagarMBean.listenerSearchByParameter}" reRender="tableContaPagar, scContaPagar">
+					<f:param id="paramSearch" name="paramSearch" value="#{ContaPagarMBean.contaPagarSearch.numeroDocumento}" />
+				</a4j:commandButton>
+			</h:panelGrid>
+			<br/>
+			<br/>
+           	<a4j:commandLink style="color : #000000;" value="Inserir" id="btnSaveContaPagar" actionListener="#{ContaPagarMBean.listenerScreenSave}" reRender="numeroDocumentoContaPagar, idFornecedorContaPagar, nomeFornecedorContaPagar, dataVencimentoContaPagar, 
+           							dataQuitacaoContaPagar, valorContaPagar, jurosContaPagar, multaContaPagar, valorPagoContaPagar, idFormaPagamentoContaPagar, descricaoFormaPagamentoContaPagar, observacaoContaPagar, buttonSaveContaPagar, buttonDeleteContaPagar">
+				<rich:componentControl for="manterContaPagar" attachTo="btnSaveContaPagar" operation="show" event="onclick" />
+			</a4j:commandLink>
+			<br/>
+			<br/>
+			<rich:dataTable width="500" id="tableContaPagar" rows="10" value="#{ContaPagarMBean.contasPagar}" var="contaPagar">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column>
+						<h:outputText value="Documento" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Vencimento" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Valor" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Fornecedor" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Status" />
+					</rich:column>
+					<rich:column colspan="2" width="30px">
+						<h:outputText value="Ação" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column style="text-align:center" sortBy="#{contaPagar.numeroDocumento}" filterBy="#{contaPagar.numeroDocumento}" filterEvent="onkeyup">
+               	<f:facet name="header">
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+                <h:outputText value="#{contaPagar.numeroDocumento}"/>
+            </rich:column> 
+            <rich:column sortBy="#{contaPagar.dataVencimento}" filterBy="#{contaPagar.dataVencimento}" filterEvent="onkeyup">
+                <h:outputText value="#{contaPagar.dataVencimento}">
+                	<f:convertDateTime pattern="dd/MM/yyyy"/>
+				</h:outputText> 
+            </rich:column>
+            <rich:column sortBy="#{contaPagar.valor}" filterBy="#{contaPagar.valor}" filterEvent="onkeyup">
+                <h:outputText value="#{contaPagar.valor}" >
+						<f:convertNumber   pattern="R$ ###,###.00" maxFractionDigits="2" />
+					</h:outputText> 
+            </rich:column>
+            <rich:column sortBy="#{contaPagar.fornecedor.nomeRazaoSocial}" filterBy="#{contaPagar.fornecedor.nomeRazaoSocial}" filterEvent="onkeyup">
+                <h:outputText value="#{contaPagar.fornecedor.nomeRazaoSocial}"/> 
+            </rich:column>
+            <rich:column sortBy="#{contaPagar.statusContas}" filterBy="#{contaPagar.statusContas}" filterEvent="onkeyup">
+                <h:outputText value="#{contaPagar.statusContas}"/> 
+            </rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<f:facet  name="header" >
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+					<a4j:commandLink id="btnUpdateContaPagar" action="#{ContaPagarMBean.listAll}" actionListener="#{ContaPagarMBean.listenerUpdate}" oncomplete="Richfaces.showModalPanel('manterContaPagar');"
+								     reRender="manterContaPagarModal ">
+						<h:graphicImage value="/images/icons/edit.gif" style="cursor:pointer; border:0;" id="hidelinkedit" title="Editar"/>
+						<f:param id="paramUpdate" name="paramUpdate" value="#{contaPagar.idContaPagar}" />
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+					<a4j:commandLink id="btnDeleteContaPagar"	action="#{ContaPagarMBean.listAll}" actionListener="#{ContaPagarMBean.listenerScreenDelete}" oncomplete="Richfaces.showModalPanel('manterContaPagar');"
+						             reRender="manterContaPagarModal">
+						<h:graphicImage value="/images/icons/delete.gif" style="cursor:pointer; border:0;" id="hidelinkdelete" title="Remover"/>
+						<f:param id="paramDelete" name="paramDelete" value="#{contaPagar.idContaPagar}"/>
+					</a4j:commandLink>
+				</rich:column>
+				<f:facet name="footer">
+		   				<rich:columnGroup >
+		   					<rich:column colspan="7" breakBefore="true" style="text-align:center">
+		   						<rich:datascroller align="center" for="tableContaPagar" maxPages="30" page="#{ContaPagarMBean.scrollerPage}" id="scContaPagar" renderIfSinglePage="false"/>
+		   					</rich:column>
+		   				</rich:columnGroup>
+		   			</f:facet>
+			</rich:dataTable>
+		</a4j:form></center>
+	</rich:panel>
+	<ui:include src="manterContaPagar.xhtml"/>
+</ui:composition>

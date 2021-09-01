@@ -1,0 +1,116 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<script>
+	function setaCliente(id, nome){
+		document.getElementById('manterContaReceberModal:idClienteContaReceber').value = id;
+		document.getElementById('manterContaReceberModal:idClienteContaReceber').focus();
+	    document.getElementById('manterContaReceberModal:nomeClienteContaReceber').value = nome;
+	}
+
+	function setaFormaPagamento(id, descricao){
+    	document.getElementById('manterContaReceberModal:idFormaPagamentoContaReceber').value = id;
+    	document.getElementById('manterContaReceberModal:idFormaPagamentoContaReceber').focus();
+        document.getElementById('manterContaReceberModal:descricaoFormaPagamentoContaReceber').value = descricao;
+    }
+</script>
+	<rich:modalPanel id="manterContaReceber" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter Conta a Receber" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkContaReceber" />
+				<rich:componentControl for="manterContaReceber" attachTo="hidelinkContaReceber"
+					operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		<br />
+		<rich:messages style="color: red; font-weight: bold;" />
+		<a4j:form id="manterContaReceberModal" ajaxSubmit="true" reRender="numeroDocumentoContaReceber, idClienteContaReceber, nomeClienteContaReceber, dataVencimentoContaReceber, 
+           							dataQuitacaoContaReceber, valorContaReceber, jurosContaReceber, multaContaReceber, valorPagoContaReceber, idFormaPagamentoContaReceber, 
+           							descricaoFormaPagamentoContaReceber, observacaoContaReceber">
+			<h:panelGrid columns="3">
+
+				<h:outputText value="Documento:*" />
+				<h:inputText id="numeroDocumentoContaReceber" value="#{ContaReceberMBean.contaReceber.numeroDocumento}" readonly="#{ContaReceberMBean.inEditing}"/>
+				<h:outputText value="" />
+			</h:panelGrid>
+			
+			<h:panelGrid columns="4">
+				<h:outputText value="Cliente:*" />
+				<h:inputText size="5" id="idClienteContaReceber" value="#{ContaReceberMBean.clienteContaReceber.idCliente}" readonly="#{ContaReceberMBean.inEditing}"/>
+				<h:inputText size="40" id="nomeClienteContaReceber" value="#{ContaReceberMBean.clienteContaReceber.nomeRazaoSocial}" readonly="#{ContaReceberMBean.inEditing}"/>
+				<a4j:commandLink style="color:#000000" value="Selecionar Cliente" id="btnSelecionarCliente" readonly="#{ContaReceberMBean.inEditing}">
+                    	<rich:componentControl for="selecionarCliente" attachTo="btnSelecionarCliente" operation="show" event="onclick"/>
+                </a4j:commandLink>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="4">
+				<h:outputText value="Vencimento:*" />
+				<rich:calendar value="#{ContaReceberMBean.contaReceber.dataVencimento}" id="dataVencimentoContaReceber" popup="true" datePattern="dd/MM/yyyy" 
+                    				cellHeight="24px" cellWidth="22px" style="width:200px" readonly="#{ContaReceberMBean.inEditing}">
+                </rich:calendar>
+				<h:outputText value="Quitação:" />
+				<rich:calendar value="#{ContaReceberMBean.contaReceber.dataQuitacao}" id="dataQuitacaoContaReceber" popup="true" datePattern="dd/MM/yyyy" 
+                    				cellHeight="24px" cellWidth="22px" style="width:200px" readonly="#{ContaReceberMBean.inEditing}">
+                </rich:calendar>
+				
+				<h:outputText value="Valor:*" />
+				<h:inputText id="valorContaReceber" value="#{ContaReceberMBean.contaReceber.valor}" readonly="#{ContaReceberMBean.inEditing}">
+					<f:convertNumber   pattern="R$ ###,###.00" integerOnly="false" maxFractionDigits="2" />
+				</h:inputText>
+				<h:outputText value="Desconto:" />
+				<h:inputText id="descontoContaReceber" value="#{ContaReceberMBean.contaReceber.desconto}" readonly="#{ContaReceberMBean.inEditing}">
+					<f:convertNumber   pattern="R$ ###,###.00" integerOnly="false" maxFractionDigits="2" />
+				</h:inputText>
+				
+				<h:outputText value="Multa:" />
+				<h:inputText id="multaContaReceber" value="#{ContaReceberMBean.contaReceber.multa}" readonly="#{ContaReceberMBean.inEditing}">
+					<f:convertNumber   pattern="R$ ###,###.00" integerOnly="false" maxFractionDigits="2" />
+				</h:inputText>
+				<h:outputText value="Valor Pago:" />
+				<h:inputText id="valorPagoContaReceber" value="#{ContaReceberMBean.contaReceber.valorRecebido}" readonly="#{ContaReceberMBean.inEditing}">
+					<f:convertNumber   pattern="R$ ###,###.00" integerOnly="false" maxFractionDigits="2" />
+				</h:inputText>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="4">
+				<h:outputText value="Forma de Pagamento:*" />
+				<h:inputText size="5" id="idFormaPagamentoContaReceber" value="#{ContaReceberMBean.formaPagamentoContaReceber.idFormaPagamento}" readonly="#{ContaReceberMBean.inEditing}"/>
+				<h:inputText size="40" id="descricaoFormaPagamentoContaReceber" value="#{ContaReceberMBean.formaPagamentoContaReceber.descricao}" readonly="#{ContaReceberMBean.inEditing}"/>
+				<a4j:commandLink style="color:#000000" value="Selecionar Forma Pagamento" id="btnSelecionarFormaPagamento" readonly="#{ContaReceberMBean.inEditing}">
+                    	<rich:componentControl for="selecionarFormaPagamento" attachTo="btnSelecionarFormaPagamento" operation="show" event="onclick"/>
+                </a4j:commandLink>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<h:outputText value="Observação:" />
+				<h:inputTextarea style="font-size: 10pt;" cols="50" rows="2" id="observacaoContaReceber" value="#{ContaReceberMBean.contaReceber.obs}" label="Observações" readonly="#{ContaReceberMBean.inEditing}" />
+			</h:panelGrid>
+			<a4j:commandButton action="#{ContaReceberMBean.listAll}" actionListener="#{ContaReceberMBean.listenerSave}" value="Grava"
+				id="buttonSaveContaReceber" readonly="true" reRender="tableContaReceber, numeroDocumentoContaReceber, idClienteContaReceber, nomeClienteContaReceber, dataVencimentoContaReceber, 
+           							dataQuitacaoContaReceber, valorContaReceber, jurosContaReceber, multaContaReceber, valorPagoContaReceber, idFormaPagamentoContaReceber, 
+           							descricaoFormaPagamentoContaReceber, observacaoContaReceber"/>
+			<a4j:commandButton action="#{ContaReceberMBean.listAll}"	actionListener="#{ContaReceberMBean.listenerDelete}" value="Cancelar"
+				id="buttonDeleteContaReceber" reRender="tableContaReceber" readonly="true" />
+		</a4j:form>
+	</rich:modalPanel>
+	<ui:include src="../cliente/selecionarCliente.xhtml" />
+	<ui:include src="../formaPagamento/selecionarFormaPagamento.xhtml" />
+</ui:composition>

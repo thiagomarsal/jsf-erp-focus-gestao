@@ -1,0 +1,110 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:panel>
+	<f:facet name="header">
+		<h:outputText value="Manter Cidade" />
+	</f:facet>
+		<center><a4j:form>
+			<h:panelGrid columns="3">
+				<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Nome:" />
+				<h:inputText value="#{CidadeMBean.cidadeSearch.nome}">
+					<a4j:support event="onkeyup" action="#{CidadeMBean.searchByParameter}" actionListener="#{CidadeMBean.listenerSearchByParameter}" reRender="tableCidade, scCidade"/>
+				</h:inputText>
+				<a4j:commandButton value="Refresh" action="#{CidadeMBean.searchByParameter}" actionListener="#{CidadeMBean.listenerSearchByParameter}" reRender="tableCidade, scCidade">
+					<f:param id="paramSearch" name="paramSearch" value="#{CidadeMBean.cidadeSearch.nome}" />
+				</a4j:commandButton>
+			</h:panelGrid>
+			<br/>
+			<br/>
+           	    <a4j:commandLink style="color : #000000;" value="Inserir" id="btnSaveCidade" actionListener="#{CidadeMBean.listenerScreenSave}" reRender="idCidade, nomeCidade, dddCidade, idEstadoCidade, nomeEstadoCidade, buttonSaveCidade, buttonDeleteCidade">
+				<rich:componentControl for="manterCidade" attachTo="btnSaveCidade" operation="show" event="onclick" />
+			</a4j:commandLink>
+			<br/>
+			<br/>
+			<rich:dataTable width="500" id="tableCidade" rows="10" value="#{CidadeMBean.cidades}" var="cidade">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column>
+						<h:outputText value="Código" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Nome" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="DDD" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Estado" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="País" />
+					</rich:column>
+					<rich:column colspan="2" width="30px">
+						<h:outputText value="Ação" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column style="text-align:center" sortBy="#{cidade.idCidade}" filterBy="#{cidade.idCidade}" filterEvent="onkeyup">
+               	<f:facet name="header">
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+                <h:outputText value="#{cidade.idCidade}"/>
+            </rich:column> 
+            <rich:column sortBy="#{cidade.nome}" filterBy="#{cidade.nome}" filterEvent="onkeyup">
+                <h:outputText value="#{cidade.nome}"/> 
+            </rich:column>
+            <rich:column style="text-align:center" sortBy="#{cidade.ddd}" filterBy="#{cidade.ddd}" filterEvent="onkeyup">
+                <h:outputText value="#{cidade.ddd}"/> 
+            </rich:column>
+            <rich:column sortBy="#{cidade.estado.nome}" filterBy="#{cidade.estado.nome}" filterEvent="onkeyup">
+                <h:outputText value="#{cidade.estado.nome}"/> 
+            </rich:column>
+            <rich:column sortBy="#{cidade.estado.pais.nome}" filterBy="#{cidade.estado.pais.nome}" filterEvent="onkeyup">
+                <h:outputText value="#{cidade.estado.pais.nome}"/> 
+            </rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<f:facet  name="header" >
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+					<a4j:commandLink id="btnUpdateCidade" action="#{CidadeMBean.listAll}" actionListener="#{CidadeMBean.listenerUpdate}" oncomplete="Richfaces.showModalPanel('manterCidade');"
+								     reRender="manterCidadeModal ">
+						<h:graphicImage value="/images/icons/edit.gif" style="cursor:pointer; border:0;" id="hidelinkedit" title="Editar"/>
+						<f:param id="paramUpdate" name="paramUpdate" value="#{cidade}" />
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+					<a4j:commandLink id="btnDeleteCidade"	action="#{CidadeMBean.listAll}" actionListener="#{CidadeMBean.listenerScreenDelete}" oncomplete="Richfaces.showModalPanel('manterCidade');"
+						             reRender="manterCidadeModal">
+						<h:graphicImage value="/images/icons/delete.gif" style="cursor:pointer; border:0;" id="hidelinkdelete" title="Remover"/>
+						<f:param id="paramDelete" name="paramDelete" value="#{cidade.idCidade}"/>
+					</a4j:commandLink>
+				</rich:column>
+				<f:facet name="footer">
+		   				<rich:columnGroup >
+		   					<rich:column colspan="7" breakBefore="true" style="text-align:center">
+		   						<rich:datascroller align="center" for="tableCidade" maxPages="30" page="#{CidadeMBean.scrollerPage}" id="scCidade" renderIfSinglePage="false"/>
+		   					</rich:column>
+		   				</rich:columnGroup>
+		   			</f:facet>
+			</rich:dataTable>
+		</a4j:form></center>
+	</rich:panel>
+	<ui:include src="manterCidade.xhtml"/>
+</ui:composition>

@@ -1,0 +1,75 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:modalPanel id="manterPais" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter Pais" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkPais" />
+				<rich:componentControl for="manterPais" attachTo="hidelinkPais"
+					operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		<br />
+		<rich:messages style="color: red; font-weight: bold;"></rich:messages>
+		<a4j:form id="manterPaisModal" ajaxSubmit="true"
+			reRender="idPais, nomePais, siglaPais, ddiPais">
+			<h:panelGrid columns="2">
+
+				<h:outputText value="Código" />
+				<h:inputText value="#{PaisMBean.pais.idPais}" id="idPais"
+					readonly="true" />
+
+				<h:outputText value="Nome*" />
+				<h:inputText value="#{PaisMBean.pais.nome}" id="nomePais"
+					required="true" requiredMessage="Nome é Obrigatório!"
+					disabled="#{PaisMBean.inEditing}" maxlength="30">
+					<f:validateLength minimum="1" maximum="30" />
+				</h:inputText>
+
+				<h:outputText value="Sigla*" />
+				<h:inputText value="#{PaisMBean.pais.sigla}" id="siglaPais"
+					required="true" requiredMessage="Sigla é Obrigatório!"
+					maxlength="3" disabled="#{PaisMBean.inEditing}">
+					<f:validateLength minimum="1" maximum="3" />
+				</h:inputText>
+
+				<h:outputText value="DDI" />
+				<h:inputText value="#{PaisMBean.pais.ddi}" id="ddiPais"
+					maxlength="3" disabled="#{PaisMBean.inEditing}"
+					converterMessage="DDI precisa ser um numero!">
+					<f:convertNumber integerOnly="true" />
+				</h:inputText>
+			</h:panelGrid>
+			<a4j:commandButton action="#{PaisMBean.listAll}"
+				actionListener="#{PaisMBean.listenerSave}" value="Grava"
+				id="buttonSavePais" reRender="tablePais"
+				disabled="#{PaisMBean.inEditing}" />
+			<a4j:commandButton action="#{PaisMBean.listAll}"
+				actionListener="#{PaisMBean.listenerDelete}" value="Exclui"
+				id="buttonDeletePais" reRender="tablePais"
+				disabled="#{PaisMBean.showButton}" />
+
+		</a4j:form>
+	</rich:modalPanel>
+
+
+</ui:composition>

@@ -1,0 +1,98 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:panel>
+	<f:facet name="header">
+		<h:outputText value="Manter Condição de Pagamento" />
+	</f:facet>
+		<center><a4j:form>
+			<h:panelGrid columns="3">
+				<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Descrição" />
+				<h:inputText value="#{CondicaoPagamentoMBean.condicaoPagamentoSearch.descricao}">
+					<a4j:support event="onkeyup" action="#{CondicaoPagamentoMBean.searchByParameter}" actionListener="#{CondicaoPagamentoMBean.listenerSearchByParameter}" reRender="tableCondicaoPagamento, scCondicaoPagamento"/>
+				</h:inputText>
+				<a4j:commandButton value="Refresh" action="#{CondicaoPagamentoMBean.searchByParameter}" actionListener="#{CondicaoPagamentoMBean.listenerSearchByParameter}" reRender="tableCondicaoPagamento, scCondicaoPagamento">
+					<f:param id="paramSearch" name="paramSearch" value="#{CondicaoPagamentoMBean.condicaoPagamentoSearch.descricao}" />
+				</a4j:commandButton>
+			</h:panelGrid>
+			<br/>
+			<br/>
+           	    <a4j:commandLink style="color : #000000;" value="Inserir" id="btnSaveCondicaoPagamento" actionListener="#{CondicaoPagamentoMBean.listenerScreenSave}" reRender="idCondicaoPagamento, descricaoCondicaoPagamento, parcelasCondicaoPagamento, periodoParcelasCondicaoPagamento, buttonSaveCondicaoPagamento, buttonDeleteCondicaoPagamento">
+				<rich:componentControl for="manterCondicaoPagamento" attachTo="btnSaveCondicaoPagamento" operation="show" event="onclick" />
+			</a4j:commandLink>
+			<br/>
+			<br/>
+			<rich:dataTable width="500" id="tableCondicaoPagamento" rows="10" value="#{CondicaoPagamentoMBean.condicoesPagamento}" var="condicaoPagamento">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column>
+						<h:outputText value="Código" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Descrição" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Parcelas" />
+					</rich:column>
+					<rich:column colspan="2" width="30px">
+						<h:outputText value="Ação" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column style="text-align:center" sortBy="#{condicaoPagamento.idCondicaoPagamento}" filterBy="#{condicaoPagamento.idCondicaoPagamento}" filterEvent="onkeyup">
+               	<f:facet name="header">
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+                <h:outputText value="#{condicaoPagamento.idCondicaoPagamento}"/>
+            </rich:column> 
+            <rich:column sortBy="#{condicaoPagamento.descricao}" filterBy="#{condicaoPagamento.descricao}" filterEvent="onkeyup">
+                <h:outputText value="#{condicaoPagamento.descricao}"/> 
+            </rich:column>
+            <rich:column style="text-align:center" sortBy="#{condicaoPagamento.parcelas}" filterBy="#{condicaoPagamento.parcelas}" filterEvent="onkeyup">
+                <h:outputText value="#{condicaoPagamento.parcelas}"/> 
+            </rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<f:facet  name="header" >
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+					<a4j:commandLink id="btnUpdateCondicaoPagamento" action="#{CondicaoPagamentoMBean.listAll}" actionListener="#{CondicaoPagamentoMBean.listenerUpdate}" oncomplete="Richfaces.showModalPanel('manterCondicaoPagamento');"
+								     reRender="manterCondicaoPagamentoModal ">
+						<h:graphicImage value="/images/icons/edit.gif" style="cursor:pointer; border:0;" id="hidelinkedit" title="Editar"/>
+						<f:param id="paramUpdate" name="paramUpdate" value="#{condicaoPagamento}" />
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+					<a4j:commandLink id="btnDeleteCondicaoPagamento"	action="#{CondicaoPagamentoMBean.listAll}" actionListener="#{CondicaoPagamentoMBean.listenerScreenDelete}" oncomplete="Richfaces.showModalPanel('manterCondicaoPagamento');"
+						             reRender="manterCondicaoPagamentoModal">
+						<h:graphicImage value="/images/icons/delete.gif" style="cursor:pointer; border:0;" id="hidelinkdelete" title="Remover"/>
+						<f:param id="paramDelete" name="paramDelete" value="#{condicaoPagamento.idCondicaoPagamento}"/>
+					</a4j:commandLink>
+				</rich:column>
+				<f:facet name="footer">
+		   				<rich:columnGroup >
+		   					<rich:column colspan="5" breakBefore="true" style="text-align:center">
+		   						<rich:datascroller align="center" for="tableCondicaoPagamento" maxPages="30" page="#{CondicaoPagamentoMBean.scrollerPage}" id="scCondicaoPagamento" renderIfSinglePage="false"/>
+		   					</rich:column>
+		   				</rich:columnGroup>
+		   			</f:facet>
+			</rich:dataTable>
+		</a4j:form></center>
+	</rich:panel>
+	<ui:include src="manterCondicaoPagamento.xhtml"/>
+</ui:composition>

@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+	  xmlns:rich="http://richfaces.org/rich">
+      
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8"/>
+<title>
+	<ui:insert name="title"/>
+</title>
+<link rel="STYLESHEET" type="text/css" href="${facesContext.externalContext.requestContextPath}/css/common.css"/>
+ 
+<ui:include src="/templates/include/dynamic-css.xhtml" />
+</head>
+
+<body>
+
+<ui:include src="/templates/include/header.xhtml" />
+<table class="left_menu" cellpadding="0" cellspacing="0" border="0">
+<tbody>
+	<tr>
+		<td>
+			<ui:include src="/templates/include/references.xhtml" />
+			<div class="menu_separator">
+			</div>
+		</td>
+	</tr>
+</tbody>
+</table>
+
+<h:graphicImage value="#{componentNavigator.currentComponent.captionImage}" 
+	rendered="#{componentNavigator.hasCurrentComponent}" height="40" alt="" border="0" styleClass="component_name"/>
+
+<table cellpadding="0" cellspacing="0" border="0" class="content_container" width="100%">
+<tbody>
+	<tr>
+		<td>
+			<div class="content_container_left_brick"></div>
+		</td>
+		<td width="100%" class="content_container_pdddings">
+<!-- panel begin -->
+		<ui:insert name="body">Body</ui:insert>
+<!-- panel end -->	
+		<rich:spacer style="height:10px;" />
+		<rich:separator style="height:1px" />	
+		<div style="float:right;" class="footer-text"></div>
+		<div style="float:none">
+			<a style="color:#000; display:block"  class="footer-text">Copyright (c) 2008 Thiago M. Farias All Rights Reserved</a>
+		</div>
+		</td>
+	</tr>
+</tbody>
+</table>
+
+</body>
+</html>

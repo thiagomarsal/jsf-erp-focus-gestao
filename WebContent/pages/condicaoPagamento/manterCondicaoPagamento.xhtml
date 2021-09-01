@@ -1,0 +1,77 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:modalPanel id="manterCondicaoPagamento" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter CondicaoPagamento" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkCondicaoPagamento" />
+				<rich:componentControl for="manterCondicaoPagamento"
+					attachTo="hidelinkCondicaoPagamento" operation="hide"
+					event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		<br />
+		<rich:messages style="color: red; font-weight: bold;" />
+		<a4j:form id="manterCondicaoPagamentoModal" ajaxSubmit="true"
+			reRender="idCondicaoPagamento, descricaoCondicaoPagamento, parcelasCondicaoPagamento, periodoParcelasCondicaoPagamento, idFormaPagamentoCondicaoPagamento, descricaoFormaPagamentoCondicaoPagamento">
+			<h:panelGrid columns="2">
+
+				<h:outputText value="Código" />
+				<h:inputText
+					value="#{CondicaoPagamentoMBean.condicaoPagamento.idCondicaoPagamento}"
+					id="idCondicaoPagamento" readonly="true" />
+
+				<h:outputText value="Descrição*" />
+				<h:inputText
+					value="#{CondicaoPagamentoMBean.condicaoPagamento.descricao}"
+					id="descricaoCondicaoPagamento" required="true"
+					requiredMessage="Descrição é Obrigatório!"
+					disabled="#{CondicaoPagamentoMBean.inEditing}" maxlength="30">
+					<f:validateLength minimum="1" maximum="30" />
+				</h:inputText>
+
+				<h:outputText value="Parcelas*" />
+				<h:inputText
+					value="#{CondicaoPagamentoMBean.condicaoPagamento.parcelas}"
+					id="parcelasCondicaoPagamento" required="true"
+					requiredMessage="Parcelas é Obrigatório!"
+					converterMessage="Parcelas precisa ser um numero!" maxlength="3"
+					disabled="#{CondicaoPagamentoMBean.inEditing}">
+					<f:validateLength minimum="1" maximum="3" />
+					<f:convertNumber integerOnly="true" />
+				</h:inputText>
+
+			</h:panelGrid>
+			<a4j:commandButton action="#{CondicaoPagamentoMBean.listAll}"
+				actionListener="#{CondicaoPagamentoMBean.listenerSave}"
+				value="Grava" id="buttonSaveCondicaoPagamento"
+				reRender="tableCondicaoPagamento"
+				disabled="#{CondicaoPagamentoMBean.inEditing}" />
+			<a4j:commandButton action="#{CondicaoPagamentoMBean.listAll}"
+				actionListener="#{CondicaoPagamentoMBean.listenerDelete}"
+				value="Exclui" id="buttonDeleteCondicaoPagamento"
+				reRender="tableCondicaoPagamento"
+				disabled="#{CondicaoPagamentoMBean.showButton}" />
+		</a4j:form>
+	</rich:modalPanel>
+	<ui:include src="../formaPagamento/selecionarFormaPagamento.xhtml" />
+</ui:composition>

@@ -1,0 +1,62 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:modalPanel id="manterGrupo" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter Grupo" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkGrupo" />
+				<rich:componentControl for="manterGrupo" attachTo="hidelinkGrupo"
+					operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		<br />
+		<rich:messages style="color: red; font-weight: bold;" />
+		<a4j:form id="manterGrupoModal" ajaxSubmit="true"
+			reRender="idGrupo, descricaoGrupo">
+			<h:panelGrid columns="2">
+
+				<h:outputText value="Código" />
+				<h:inputText value="#{GrupoMBean.grupo.idGrupo}" id="idGrupo"
+					readonly="true" />
+
+
+				<h:outputText value="Descrição*" />
+				<h:inputText value="#{GrupoMBean.grupo.descricao}"
+					id="descricaoGrupo" required="true"
+					requiredMessage="Descrição é Obrigatório!"
+					disabled="#{GrupoMBean.inEditing}" maxlength="30">
+					<f:validateLength minimum="1" maximum="30" />
+					<rich:ajaxValidator event="onblur" />
+				</h:inputText>
+			</h:panelGrid>
+			<a4j:commandButton action="#{GrupoMBean.listAll}"
+				actionListener="#{GrupoMBean.listenerSave}" value="Grava"
+				id="buttonSaveGrupo" reRender="tableGrupo"
+				disabled="#{GrupoMBean.inEditing}" />
+			<a4j:commandButton action="#{GrupoMBean.listAll}"
+				actionListener="#{GrupoMBean.listenerDelete}" value="Exclui"
+				id="buttonDeleteGrupo" reRender="tableGrupo"
+				disabled="#{GrupoMBean.showButton}" />
+
+		</a4j:form>
+	</rich:modalPanel>
+</ui:composition>

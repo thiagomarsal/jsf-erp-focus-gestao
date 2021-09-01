@@ -1,0 +1,158 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:modalPanel id="manterReceita" autosized="true">
+	<f:facet name="header">
+            <h:outputText value="Manter Receitas" />
+        </f:facet>
+        <f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkReceita" />
+				<rich:componentControl for="manterReceita" attachTo="hidelinkReceita"
+					operation="hide" event="onclick"/>
+			</h:panelGroup>
+		</f:facet>
+			<rich:messages style="color: red; font-weight: bold;"></rich:messages>
+			<a4j:form id="manterReceitaModal" ajaxSubmit="true">
+				<h:panelGrid columns="6">
+					<h:outputText value="Código" />
+					<h:inputText size="8"
+						value="#{ReceitaMBean.receita.idReceita}"
+						id="idReceita" readonly="true" />
+
+					<h:outputText value="Descrição*" />
+					<h:inputText size="60"
+						value="#{ReceitaMBean.receita.descricao}"
+						id="descricaoReceita" required="true"
+						requiredMessage="Descrição é Obrigatório!"
+						disabled="#{ReceitaMBean.inEditing}" maxlength="40">
+						<f:validateLength minimum="1" maximum="40" />
+					</h:inputText>
+					<h:outputText value="Olho*" />
+					<rich:comboBox id="olhoReceita" required="true"
+						requiredMessage="Olho é Obrigatório!" defaultLabel="Selecione"
+						value="#{ReceitaMBean.receita.olho}">
+						<f:selectItem itemValue="Não Considerar" itemLabel="Não Considerar" />
+						<f:selectItem itemValue="Direito" itemLabel="Direito" />
+						<f:selectItem itemValue="Esquerdo" itemLabel="Esquerdo" />
+					</rich:comboBox>
+				</h:panelGrid>
+				<h:panelGrid columns="8">
+					<h:outputText value="Curva*" />
+					<rich:inputNumberSpinner value="#{ReceitaMBean.receita.curva}" maxValue="10.00" minValue="-10.00" step="0.05"
+												id="curvaReceita" required="true"
+						requiredMessage="Curva é Obrigatório!"
+						disabled="#{ReceitaMBean.inEditing}"/>
+					
+					<h:outputText value="Grau*" />
+					<rich:inputNumberSpinner value="#{ReceitaMBean.receita.eixo}" maxValue="10.00" minValue="-10.00" step="0.05"
+												id="eixoReceita" required="true"
+						requiredMessage="Eixo é Obrigatório!"
+						disabled="#{ReceitaMBean.inEditing}"/>
+
+					<h:outputText value="Diâmetro*" />
+					<rich:inputNumberSpinner value="#{ReceitaMBean.receita.diametro}" maxValue="10.00" minValue="-10.00" step="0.05"
+												id="diametroReceita" required="true"
+						requiredMessage="Diâmetro é Obrigatório!"
+						disabled="#{ReceitaMBean.inEditing}"/>
+
+					<h:outputText value="Espessura*" />
+					<rich:inputNumberSpinner value="#{ReceitaMBean.receita.espessura}" maxValue="10.00" minValue="-10.00" step="0.05"
+												id="espessuraReceita" required="true"
+						requiredMessage="Espessura é Obrigatório!"
+						disabled="#{ReceitaMBean.inEditing}"/>
+				</h:panelGrid>
+				<fieldset class="demo_fieldset"><legend
+					class="demo_legend">Serviços</legend> <h:panelGrid
+					columns="3">
+
+					<a4j:commandLink style="color:#000000" value="Selecionar Serviço"
+						id="btnSelectServico" disabled="#{ReceitaMBean.showButton}">
+						<rich:componentControl for="selecionarServico"
+							attachTo="btnSelectServico" operation="show" event="onclick" />
+					</a4j:commandLink>
+					<h:outputText value="" />
+					<h:outputText value="" />
+					<rich:dataTable width="500" id="tableServicosSelecionados" rows="5"	value="#{ReceitaMBean.servicosSelecionados}" var="servico">
+						<rich:column width="30"  sortBy="">
+							<f:facet name="header">
+								<h:outputText value="Código" />
+							</f:facet>
+							<h:outputText value="#{servico.servico.idServico}" />
+						</rich:column>
+						<rich:column sortBy="#{servico.descricao}">
+							<f:facet name="header">
+								<h:outputText value="Descrição" />
+							</f:facet>
+							<h:outputText value="#{servico.descricao}" id="descricaoServicoSelecionado" />
+						</rich:column>
+						<rich:column width="60px" sortBy="#{servico.preco}">
+							<f:facet name="header">
+								<h:outputText value="Preço" />
+							</f:facet>
+							<h:outputText value="#{servico.preco}">
+							<f:convertNumber   pattern="R$ ###,###.00" maxFractionDigits="2" />
+							</h:outputText>
+						</rich:column>
+						<rich:column width="30px">
+							<f:facet name="header">
+								<h:outputText value="Excluir" />
+							</f:facet>
+							<a4j:commandLink id="btnDeleteServicoSelecionado"
+								actionListener="#{ReceitaMBean.listenerRemoveItemList}"
+								reRender="tableServicosSelecionados, scServicosSelecionados, precoServicos, precoCusto, precoVenda" immediate="true">
+								<h:graphicImage value="/images/icons/delete.gif" 
+									style="cursor:pointer; border:0" id="hidelinkdelete"
+									title="Remover" />
+								<f:param id="paramDelete" name="paramDelete"
+									value="#{servico}" />
+							</a4j:commandLink>
+						</rich:column>
+					</rich:dataTable>
+					<h:outputText style="width:10px" value="" />
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Preço Serviços " />
+						<h:inputText size="10" value="#{ReceitaMBean.receita.totalServicos}" id="precoServicos" readonly="true"
+							disabled="#{ReceitaMBean.inEditing}" />
+						<h:outputText value="Preço Venda " />
+						<h:inputText size="10" value="#{ReceitaMBean.receita.precoVenda}" id="precoVenda" readonly="true"
+							disabled="#{ReceitaMBean.inEditing}" />
+
+					</h:panelGrid>
+					
+				</h:panelGrid></fieldset>
+				<h:panelGrid columns="3">
+					<h:outputText value="Observações" />
+					<h:inputTextarea cols="66" rows="2" id="observacao" 
+						value="#{ReceitaMBean.receita.obs}" label="Observações" disabled="#{FornecedorMBean.inEditing}"/>
+				</h:panelGrid>
+				<a4j:commandButton action="#{ReceitaMBean.listAll}"
+					actionListener="#{ReceitaMBean.listenerSave}" value="Grava"
+					id="buttonSave" reRender="tableReceita, manterReceitaModal"
+					disabled="#{ReceitaMBean.inEditing}">
+				</a4j:commandButton>
+				<a4j:commandButton action="#{ReceitaMBean.listAll}"
+					actionListener="#{ReceitaMBean.listenerDelete}" value="Exclui"
+					id="buttonDelete" reRender="tableReceita, manterReceitaModal"
+					disabled="#{ReceitaMBean.showButton}"/>
+			</a4j:form>
+		</rich:modalPanel> 
+		<ui:include	src="../servico/selecionarServico.xhtml" />
+</ui:composition>

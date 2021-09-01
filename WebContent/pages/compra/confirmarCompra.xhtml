@@ -1,0 +1,137 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<ui:composition template="/templates/main.xhtml">
+	<ui:define name="title">Focus Gestão - Compra</ui:define>
+	<ui:define name="body">
+		<rich:panel>
+			<f:facet name="header">
+				<h:outputText value="Confirmar Compra" />
+			</f:facet>
+			<center><a4j:form>
+			<h:inputHidden value="#{CompraMBean.compra}"/>
+				<h:panelGrid columns="2">
+					<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Número: " />
+					<h:outputText style="font-size: 8pt; font-weight: bolder;" value="#{CompraMBean.compra.numero}" />
+					<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Fornecedor: " />
+					<h:outputText style="font-size: 8pt; font-weight: bolder;" value="#{CompraMBean.compra.fornecedor.nomeRazaoSocial}" />
+					<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Vendedor: " />
+					<h:outputText style="font-size: 8pt; font-weight: bolder;" value="#{CompraMBean.compra.usuario.login}" />
+					<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Valor Total: " />
+					<h:outputText style="font-size: 8pt; font-weight: bolder;" value="#{CompraMBean.compra.totalCompra}" />
+				</h:panelGrid>
+				<br />
+				<br />
+				<br />
+				<br />
+				<rich:dataTable width="90%" id="tableProdutosSelecionados" rows="15" value="#{CompraMBean.compra.produtosSelecionados}" var="compra">
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Código" />
+					</f:facet>
+					<h:outputText value="#{compra.produto.idProduto}" />
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Descrição" />
+					</f:facet>
+					<h:outputText value="#{compra.descricao}" />
+				</rich:column>
+				<rich:column width="5px">
+					<f:facet name="header">
+						<h:outputText value="C.F." />
+					</f:facet>
+					<rich:inplaceInput   id="cf" defaultLabel="C.F." value="#{compra.classificacaoFiscal}">
+		   				<a4j:support ajaxSingle="true"  event="onviewactivated" reRender="tableProdutosSelecionados"/>
+		  			</rich:inplaceInput>
+				</rich:column>
+				<rich:column width="5px">
+					<f:facet name="header">
+						<h:outputText value="S.T." />
+					</f:facet>
+					<rich:inplaceInput   id="st" defaultLabel="S.T." value="#{compra.situacaoTributaria}">
+		   				<a4j:support ajaxSingle="true"  event="onclick" reRender="tableProdutosSelecionados"/>
+		  			</rich:inplaceInput>
+				</rich:column>
+				<rich:column width="10px">
+					<f:facet name="header">
+						<h:outputText value="UN" />
+					</f:facet>
+					<h:outputText value="#{compra.unidade}" />
+				</rich:column>
+				<rich:column width="10px" >
+					<f:facet name="header">
+						<h:outputText value="QTD" />
+					</f:facet>
+					<rich:inplaceInput   id="quantidade" defaultLabel="Quantidade" value="#{compra.quantidade}">
+		   				<a4j:support ajaxSingle="true"  event="onviewactivated" reRender="tableProdutosSelecionados"/>
+		  			</rich:inplaceInput>
+				</rich:column>
+				<rich:column width="10px" style="text-align:center;">
+					<f:facet name="header">
+						<h:outputText value="Valor Unitário" />
+					</f:facet>
+					<rich:inplaceInput   id="valorUnitario" defaultLabel="valor unitário" value="#{compra.precoUnitario}">
+		   				<a4j:support ajaxSingle="true"  event="onviewactivated" reRender="tableProdutosSelecionados, totalProdutosCompra"/>
+		  			</rich:inplaceInput>
+				</rich:column>
+				<rich:column style="text-align:center;">
+					<f:facet name="header">
+						<h:outputText value="Valor Total" />
+					</f:facet>
+					<h:outputText value="#{compra.precoTotal}" >
+					<f:convertNumber   pattern="R$ ###,###.00" maxFractionDigits="2" />
+					</h:outputText>
+				</rich:column>
+				<rich:column >
+					<f:facet name="header">
+						<h:outputText value="ICMS"/>
+					</f:facet>
+					<rich:inplaceInput   id="icms" defaultLabel="ICMS" value="#{compra.aliquotaIcms}">
+		   				<a4j:support ajaxSingle="true"  event="onviewactivated" reRender="tableProdutosSelecionados"/>
+		  			</rich:inplaceInput>
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="IPI"/>
+					</f:facet>
+					<rich:inplaceInput   id="ipi" defaultLabel="IPI" value="#{compra.aliquotaIpi}">
+		   				<a4j:support ajaxSingle="true"  event="onviewactivated" reRender="tableProdutosSelecionados"/>
+		  			</rich:inplaceInput>
+				</rich:column>
+				<rich:column width="30">
+					<f:facet name="header">
+						<h:outputText value="Ação" />
+					</f:facet>
+					<h:outputLink value="manterCompra.jsf">
+						<a4j:support event="onclick" action="#{CompraMBean.listAll}"
+							actionListener="#{CompraMBean.listenerScreenDelete}"
+							reRender="manterCompra" />
+						<h:graphicImage value="/images/icons/delete.gif"
+							style="cursor:pointer; border:0" id="hidelinkdelete"
+							title="Remover" />
+						<f:param id="paramDelete" name="paramDelete"
+							value="#{compra}" />
+					</h:outputLink>
+				</rich:column>
+			</rich:dataTable>
+			</a4j:form></center>
+		</rich:panel>
+	</ui:define>
+</ui:composition>
+</html>

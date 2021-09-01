@@ -1,0 +1,98 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:panel>
+	<f:facet name="header">
+	            <h:outputText value="Manter Unidade de Medida" />
+	        </f:facet>
+		<center><a4j:form>
+			<h:panelGrid columns="3">
+				<h:outputText style="font-size: 8pt; font-weight: bolder;" value="Descrição" />
+				<h:inputText value="#{UnidadeMBean.unidadeSearch.descricao}">
+					<a4j:support event="onkeyup" action="#{UnidadeMBean.searchByParameter}" actionListener="#{UnidadeMBean.listenerSearchByParameter}" reRender="tableUnidade, scUnidade"/>
+				</h:inputText>
+				<a4j:commandButton value="Refresh" action="#{UnidadeMBean.searchByParameter}" actionListener="#{UnidadeMBean.listenerSearchByParameter}" reRender="tableUnidade, scUnidade">
+					<f:param id="paramSearch" name="paramSearch" value="#{UnidadeMBean.unidadeSearch.descricao}" />
+				</a4j:commandButton>
+			</h:panelGrid>
+			<br/>
+			<br/>
+            <a4j:commandLink style="color : #000000;" value="Inserir" id="btnSaveUnidade" actionListener="#{UnidadeMBean.listenerScreenSave}" reRender="idUnidade, descricaoUnidade, siglaUnidade, buttonSaveUnidade, buttonDeleteUnidade">
+				<rich:componentControl for="manterUnidade" attachTo="btnSaveUnidade" operation="show" event="onclick" />
+			</a4j:commandLink>
+			<br/>
+			<br/>
+			<rich:dataTable width="500" id="tableUnidade" rows="10" value="#{UnidadeMBean.unidades}" var="unidade">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column>
+						<h:outputText value="Código" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Descrição" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="Sigla" />
+					</rich:column>
+					<rich:column colspan="2" width="30px">
+						<h:outputText value="Ação" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:column style="text-align:center" sortBy="#{unidade.idUnidade}" filterBy="#{unidade.idUnidade}" filterEvent="onkeyup">
+               	<f:facet name="header">
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+                <h:outputText value="#{unidade.idUnidade}"/>
+            </rich:column> 
+            <rich:column sortBy="#{unidade.descricao}" filterBy="#{unidade.descricao}" filterEvent="onkeyup">
+                <h:outputText value="#{unidade.descricao}"/> 
+            </rich:column>
+            <rich:column sortBy="#{unidade.sigla}" filterBy="#{unidade.sigla}" filterEvent="onkeyup">
+                <h:outputText value="#{unidade.sigla}"/> 
+            </rich:column>
+				<rich:column style="text-align:center" width="30px">
+				<f:facet  name="header" >
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+					<a4j:commandLink id="btnUpdateUnidade" action="#{UnidadeMBean.listAll}" actionListener="#{UnidadeMBean.listenerUpdate}" oncomplete="Richfaces.showModalPanel('manterUnidade');"
+								     reRender="manterUnidadeModal ">
+						<h:graphicImage value="/images/icons/edit.gif" style="cursor:pointer; border:0;" id="hidelinkedit" title="Editar"/>
+						<f:param id="paramUpdate" name="paramUpdate" value="#{unidade}" />
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:center" width="30px">
+					<a4j:commandLink id="btnDeleteUnidade"	action="#{UnidadeMBean.listAll}" actionListener="#{UnidadeMBean.listenerScreenDelete}" oncomplete="Richfaces.showModalPanel('manterUnidade');"
+						             reRender="manterUnidadeModal">
+						<h:graphicImage value="/images/icons/delete.gif" style="cursor:pointer; border:0;" id="hidelinkdelete" title="Remover"/>
+						<f:param id="paramDelete" name="paramDelete" value="#{unidade.idUnidade}"/>
+					</a4j:commandLink>
+				</rich:column>
+				<f:facet name="footer">
+		   				<rich:columnGroup >
+		   					<rich:column colspan="5" breakBefore="true" style="text-align:center">
+		   						<rich:datascroller align="center" for="tableUnidade" maxPages="30" page="#{UnidadeMBean.scrollerPage}" id="scUnidade" renderIfSinglePage="false"/>
+		   					</rich:column>
+		   				</rich:columnGroup>
+		   			</f:facet>
+			</rich:dataTable>
+		</a4j:form></center>
+	</rich:panel>
+	<ui:include src="manterUnidade.xhtml"></ui:include>
+</ui:composition>

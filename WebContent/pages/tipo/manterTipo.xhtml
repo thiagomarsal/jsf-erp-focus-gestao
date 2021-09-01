@@ -1,0 +1,59 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+
+	<rich:modalPanel id="manterTipo" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter Tipo" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkTipo" />
+				<rich:componentControl for="manterTipo" attachTo="hidelinkTipo"
+					operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		<br />
+		<rich:messages style="color: red; font-weight: bold; " />
+		<a4j:form id="manterTipoModal" ajaxSubmit="true"
+			reRender="idTipo, descricaoTipo">
+			<h:panelGrid columns="2">
+
+				<h:outputText value="Código" />
+				<h:inputText value="#{TipoMBean.tipo.idTipo}" id="idTipo"
+					readonly="true" />
+
+				<h:outputText value="Nome*" />
+				<h:inputText value="#{TipoMBean.tipo.descricao}" id="descricaoTipo"
+					required="true" requiredMessage="Descrição é Obrigatória!"
+					disabled="#{TipoMBean.inEditing}" maxlength="30">
+					<f:validateLength minimum="1" maximum="30" />
+				</h:inputText>
+			</h:panelGrid>
+			<a4j:commandButton action="#{TipoMBean.listAll}"
+				actionListener="#{TipoMBean.listenerSave}" value="Grava"
+				id="buttonSaveTipo" reRender="tableTipo"
+				disabled="#{TipoMBean.inEditing}" />
+			<a4j:commandButton action="#{TipoMBean.listAll}"
+				actionListener="#{TipoMBean.listenerDelete}" value="Exclui"
+				id="buttonDeleteTipo" reRender="tableTipo"
+				disabled="#{TipoMBean.showButton}" />
+		</a4j:form>
+	</rich:modalPanel>
+</ui:composition>

@@ -1,0 +1,92 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<script>
+    function setaPaisEstado(id, nome){
+        document.getElementById('manterEstadoModal:idPaisEstado').value = id;
+        document.getElementById('manterEstadoModal:idPaisEstado').focus();
+        document.getElementById('manterEstadoModal:nomePaisEstado').value = nome;
+       
+    }
+</script>
+
+	<rich:modalPanel id="manterEstado" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter Estado" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkEstado" />
+				<rich:componentControl for="manterEstado" attachTo="hidelinkEstado"
+					operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		<br />
+		<rich:messages style="color: red; font-weight: bold;" />
+		<a4j:form id="manterEstadoModal" ajaxSubmit="true"
+			reRender="idEstado, nomeEstado, siglaEstado, idPaisEstado, nomePaisEstado">
+			<h:panelGrid columns="2">
+
+				<h:outputText value="Código" />
+				<h:inputText value="#{EstadoMBean.estado.idEstado}" id="idEstado"
+					readonly="true" />
+
+				<h:outputText value="Nome *" />
+				<h:inputText value="#{EstadoMBean.estado.nome}" id="nomeEstado"
+					required="true" requiredMessage="Nome é Obrigatório!"
+					disabled="#{EstadoMBean.inEditing}" maxlength="30">
+					<f:validateLength minimum="1" maximum="30" />
+				</h:inputText>
+
+				<h:outputText value="Sigla *" />
+				<h:inputText value="#{EstadoMBean.estado.sigla}" id="siglaEstado"
+					required="true" requiredMessage="Sigla é Obrigatório!"
+					maxlength="3" disabled="#{EstadoMBean.inEditing}">
+					<f:validateLength minimum="1" maximum="3" />
+				</h:inputText>
+
+			</h:panelGrid>
+			<fieldset class="demo_fieldset"><legend
+				class="demo_legend">País</legend>
+			<h:panelGrid columns="2">
+				<h:inputText size="1" value="#{EstadoMBean.paisEstado.idPais}"
+					id="idPaisEstado" disabled="#{EstadoMBean.inEditing}"
+					required="true" requiredMessage="País é Obrigatório!">
+				</h:inputText>
+				<h:inputText size="15" value="#{EstadoMBean.paisEstado.nome}"
+					id="nomePaisEstado" disabled="#{EstadoMBean.inEditing}" />
+				<a4j:commandLink style="color : #000000;" value="Selecionar"
+					id="btnSelect" disabled="#{EstadoMBean.showButton}">
+					<rich:componentControl for="selecionarPais" attachTo="btnSelect"
+						operation="show" event="onclick" />
+				</a4j:commandLink>
+			</h:panelGrid>
+			</fieldset>
+			<a4j:commandButton action="#{EstadoMBean.listAll}"
+				actionListener="#{EstadoMBean.listenerSave}" value="Grava"
+				id="buttonSaveEstado" reRender="tableEstado"
+				disabled="#{EstadoMBean.inEditing}" />
+			<a4j:commandButton action="#{EstadoMBean.listAll}"
+				actionListener="#{EstadoMBean.listenerDelete}" value="Exclui"
+				id="buttonDeleteEstado" reRender="tableEstado"
+				disabled="#{EstadoMBean.showButton}" />
+		</a4j:form>
+	</rich:modalPanel>
+	<ui:include src="../pais/selecionarPais.xhtml" />
+</ui:composition>

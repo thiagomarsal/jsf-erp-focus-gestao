@@ -1,0 +1,225 @@
+<!-- 
+/**
+ *  Copyright (c) 2008 Thiago M. Farias
+ *	All Rights Reserved
+ *
+ *	This product is protected by copyright and distributed under
+ *  licenses restricting copying, distribution, and decompilation.
+ *
+ *  @author Thiago M. Farias
+ */
+ -->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:stella="http://stella.caelum.com.br/faces">
+
+	<script>
+		    function setaCidade(id, nome, nomeEstado, nomePais, dddTelCidade, dddCelCidade, dddFaxCidade){
+		    	document.getElementById('manterClienteModal:idCidadeCliente').value = id;
+		        document.getElementById('manterClienteModal:nomeCidadeCliente').value = nome;
+		        document.getElementById('manterClienteModal:nomeEstadoCliente').value = nomeEstado;
+		        document.getElementById('manterClienteModal:nomePaisCliente').value = nomePais;
+		        document.getElementById('manterClienteModal:dddTelCidadeCliente').value = dddTelCidade;
+		        document.getElementById('manterClienteModal:dddCelCidadeCliente').value = dddCelCidade;
+		        document.getElementById('manterClienteModal:dddFaxCidadeCliente').value = dddFaxCidade;
+		    }
+		</script>
+		
+		<rich:modalPanel id="manterCliente" autosized="true">
+		<f:facet name="header">
+			<h:outputText value="Manter Cliente" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/images/modal/close.png"
+					style="cursor:pointer" id="hidelinkCliente" />
+				<rich:componentControl for="manterCliente" attachTo="hidelinkCliente"
+					operation="hide" event="onclick"/>
+			</h:panelGroup>
+		</f:facet>
+			<rich:messages style="color: red; font-weight: bold;"></rich:messages>
+			<a4j:form id="manterClienteModal" ajaxSubmit="true">
+			<h:outputText value="#{state.stateTitle}"/>
+			<a4j:commandLink action="switch" value="#{state.link}" immediate="true" reRender="manterClienteModal" />
+			<br/>
+			<br/>
+				<rich:separator height="5"/>
+			<br/>
+				<h:panelGrid columns="2">
+					<h:outputText value="Código" />
+					<h:inputText size="10" value="#{ClienteMBean.cliente.idCliente}" id="idCliente" readonly="true" />
+					<h:outputText value="#{state.nomeRazaoSocial} *" />
+					<h:inputText size="80" value="#{ClienteMBean.cliente.nomeRazaoSocial}" id="nomeRazaoSocialCliente" required="true"
+						requiredMessage="#{state.msgNomeRazaoSocial}"
+						disabled="#{ClienteMBean.inEditing}" maxlength="100">
+						<f:validateLength minimum="1" maximum="100" />
+					</h:inputText>
+					<h:outputText value="Nome Fantasia" rendered="#{state.showNomeFantasia}" />
+					<h:inputText size="80" value="#{ClienteMBean.cliente.apelidoNomeFantasia}" id="apelidoNomeFantasiaCliente" disabled="#{ClienteMBean.inEditing}" maxlength="100" rendered="#{state.showNomeFantasia}"/>
+				</h:panelGrid>
+				<h:panelGrid columns="6">
+					<h:outputText value="#{state.cpfCnpj} *" />
+					<h:inputText value="#{ClienteMBean.cliente.cpfCnpj}" id="cpfCliente" required="true" requiredMessage="#{state.msgCpfCnpj}" 
+					maxlength="15" disabled="#{ClienteMBean.inEditing}" rendered="#{state.showCPF}" validatorMessage="CPF Invalido !!!">
+						<stella:validateCPF />
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+					<h:inputText value="#{ClienteMBean.cliente.cpfCnpj}" id="cnpjCliente" required="true" requiredMessage="#{state.msgCpfCnpj}" 
+					maxlength="15" disabled="#{ClienteMBean.inEditing}" rendered="#{state.showCNPJ}" validatorMessage="CNPJ Invalido !!!">
+						<stella:validateCNPJ />
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+					
+					<h:outputText value="#{state.rgInscricao} *" />
+					<h:inputText value="#{ClienteMBean.cliente.rgInscricao}" id="rgInscricaoCliente" required="true" requiredMessage="#{state.msgRgInscricao}"
+					 maxlength="15"	disabled="#{ClienteMBean.inEditing}">
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+
+					<h:outputText value="Sexo:" rendered="#{state.showSexo}" />
+					<h:selectOneRadio id="sexoCliente" value="#{ClienteMBean.cliente.sexo}" disabled="#{ClienteMBean.inEditing}" rendered="#{state.showSexo}">
+                            <f:selectItem itemValue="Masculino" itemLabel="Masculino"/>
+                            <f:selectItem itemValue="Feminino" itemLabel="Feminino"/>
+                    </h:selectOneRadio>
+					</h:panelGrid>
+					<h:panelGrid columns="9">
+					<h:outputText value="Telefone *" />
+					<h:inputText size="1" value="#{ClienteMBean.cliente.cidade.ddd}" id="dddTelCidadeCliente" readonly="true" disabled="#{ClienteMBean.inEditing}" />
+					<h:inputText value="#{ClienteMBean.cliente.telefone}" id="telefoneCliente" required="true" requiredMessage="Telefone é Obrigatório!"
+					 maxlength="15"	disabled="#{ClienteMBean.inEditing}">
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+
+					<h:outputText value="Celular" />
+					<h:inputText size="1" value="#{ClienteMBean.cliente.cidade.ddd}" id="dddCelCidadeCliente" readonly="true" disabled="#{ClienteMBean.inEditing}" />
+					<h:inputText value="#{ClienteMBean.cliente.celular}" id="celularCliente" maxlength="15" disabled="#{ClienteMBean.inEditing}">
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+
+					<h:outputText value="Fax " rendered="#{state.showFax}" />
+					<h:inputText size="1" value="#{ClienteMBean.cliente.cidade.ddd}" id="dddFaxCidadeCliente" readonly="true" disabled="#{ClienteMBean.inEditing}" rendered="#{state.showFax}"/>
+					<h:inputText value="#{ClienteMBean.cliente.fax}" id="faxCliente" maxlength="15"	disabled="#{ClienteMBean.inEditing}" rendered="#{state.showFax}">
+						<f:validateLength minimum="1" maximum="15" />
+					</h:inputText>
+					</h:panelGrid>
+					<h:panelGrid columns="4">
+                    <h:outputText value="Data Nascimento: *" rendered="#{state.showDtNascimento}" />
+                    <rich:calendar value="#{ClienteMBean.cliente.dataNascimento}" id="dataNascimentoCliente" required="false"
+                                   popup="true" datePattern="dd/MM/yyyy" cellHeight="24px" cellWidth="22px" style="width:200px"
+                                   requiredMessage="Data de Nascimento Invalida!!!" disabled="#{ClienteMBean.inEditing}"
+                                   rendered="#{state.showDtNascimento}" enableManualInput="true" >
+                    </rich:calendar>
+
+                    <h:outputText value="Estado Civil: *" rendered="#{state.showEstadoCivil}"/>
+                    <rich:comboBox defaultLabel="Selecione" value="#{ClienteMBean.cliente.estadoCivil}" disabled="#{ClienteMBean.inEditing}" 
+                    			required="true" requiredMessage="Estado Civil é Obrigatório!" rendered="#{state.showEstadoCivil}">
+                         <f:selectItem itemValue="Solteiro" itemLabel="Solteiro"/>
+                         <f:selectItem itemValue="Casado" itemLabel="Casado"/>
+                         <f:selectItem itemValue="Divorciado" itemLabel="Divorciado"/>
+                         <f:selectItem itemValue="Viuvo" itemLabel="Viuvo"/>
+                         <f:selectItem itemValue="União Estavel" itemLabel="União Estavel"/>
+                     </rich:comboBox>
+                     
+                     </h:panelGrid>
+					<h:panelGrid columns="6">
+                     <h:outputText value="Email " />
+                     <h:inputText size="30" value="#{ClienteMBean.cliente.email}" id="emailCliente" disabled="#{ClienteMBean.inEditing}" maxlength="40">
+                        <f:validateLength maximum="40" />
+                     </h:inputText>
+
+                     <h:outputText value="Site " rendered="#{state.showSite}" />
+                     <h:inputText size="30" value="#{ClienteMBean.cliente.site}" id="siteCliente" disabled="#{ClienteMBean.inEditing}" maxlength="40" rendered="#{state.showSite}">
+                            <f:validateLength maximum="40" />
+                     </h:inputText>
+                     
+                     <h:outputText value="Contato: " rendered="#{state.showContato}"/>
+                        <h:inputText value="#{ClienteMBean.cliente.contato}" id="contatoCliente" disabled="#{ClienteMBean.inEditing}" maxlength="40" rendered="#{state.showSite}" >
+                            <f:validateLength maximum="40" />
+                     </h:inputText>
+				</h:panelGrid>
+				<table>
+					<tr>
+						<td>
+						<fieldset class="demo_fieldset" style="width: 80%">
+						<legend	class="demo_legend">Endereço *</legend>
+						<h:panelGrid columns="4">
+							<h:outputText value="Logradouro:*" />
+                    		<h:inputText size="65" value="#{ClienteMBean.enderecoCliente.logradouro}" id="logradouroCliente" required="true" requiredMessage="Logradouro é Obrigatório" disabled="#{ClienteMBean.inEditing}" maxlength="60">
+                            	<f:validateLength maximum="60" />
+                        	</h:inputText>
+                        	
+                        	<h:outputText value="Numero: " />
+                    		<h:inputText  size="7" value="#{ClienteMBean.enderecoCliente.numeroPredial}" id="numeroPredialCliente" required="true" requiredMessage="Numero Predial é Obrigatório" disabled="#{ClienteMBean.inEditing}" maxlength="10">
+                            	<f:validateLength maximum="10" />
+                        	</h:inputText>
+                        </h:panelGrid>	
+                        
+ 						<h:panelGrid columns="7">
+                    		<h:outputText value="Bairro: *" />
+                    		<h:inputText value="#{ClienteMBean.enderecoCliente.bairro}" id="bairroCliente" required="true" requiredMessage="Bairro é Obrigatório!" disabled="#{ClienteMBean.inEditing}" maxlength="40">
+                            <f:validateLength maximum="40" />
+                        </h:inputText>
+
+                    	<h:outputText value="Cidade: *" />
+                    	<h:inputText size="1" value="#{ClienteMBean.cidadeCliente.idCidade}" id="idCidadeCliente" disabled="#{ClienteMBean.inEditing}" required="true" requiredMessage="Cidade é Obrigatório!"/>
+                        <h:inputText size="16" value="#{ClienteMBean.cidadeCliente.nome}" id="nomeCidadeCliente" readonly="true" disabled="#{ClienteMBean.inEditing}"/>
+                        <a4j:commandLink style="color:#000000" value="Selecionar Cidade" id="btnSelecionar" disabled="#{ClienteMBean.showButton}">
+                            <rich:componentControl for="selecionarCidade" attachTo="btnSelecionar" operation="show" event="onclick"/>
+                        </a4j:commandLink>
+						
+						</h:panelGrid>
+					<h:panelGrid columns="6">
+                   <h:outputText value="Estado: " />
+                   <h:inputText size="16" value="#{ClienteMBean.cliente.cidade.estado.nome}" id="nomeEstadoCliente" readonly="true" disabled="#{ClienteMBean.inEditing}"/>
+
+                   <h:outputText value="Pais: " />
+                   <h:inputText size="16" value="#{ClienteMBean.cliente.cidade.estado.pais.nome}" id="nomePaisCliente" readonly="true" disabled="#{ClienteMBean.inEditing}"/>
+
+                   <h:outputText value="CEP: " />
+                   <h:inputText value="#{ClienteMBean.enderecoCliente.cep}" id="cepCliente" disabled="#{ClienteMBean.inEditing}" maxlength="10">
+                            <f:validateLength maximum="10" />
+                   </h:inputText>
+                   </h:panelGrid>
+                   
+                   <h:panelGrid columns="2">
+		           	<h:outputText value="Complemento: " />
+        		    <h:inputText size="80" value="#{ClienteMBean.enderecoCliente.complemento}" id="complementoCliente" disabled="#{ClienteMBean.inEditing}" maxlength="100">
+                    	<f:validateLength maximum="100" />
+                   	</h:inputText>
+          		   </h:panelGrid>
+						</fieldset>
+						</td>
+					</tr>
+				</table>
+				<h:panelGrid columns="2">
+					<h:outputText value="Observações" />
+					<h:inputTextarea style="font-size: 10pt;" cols="70" rows="2" id="observacao"	value="#{ClienteMBean.cliente.obs}" label="Observações" disabled="#{FornecedorMBean.inEditing}" />
+				</h:panelGrid>
+				<h:panelGrid columns="4">                    
+                    <h:outputText value="Data de Cadastro: " />
+                    <h:inputText  value="#{ClienteMBean.cliente.dataCadastro}" id="dataCadastroCliente" readonly="true" disabled="#{ClienteMBean.inEditing}" maxlength="10">
+                       <f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+                    </h:inputText>
+                    
+                    <h:outputText value="Data de Atualização: " />
+                    <h:inputText  value="#{ClienteMBean.cliente.dataAtualizacao }" id="dataAtualizacaoCliente" readonly="true" disabled="#{ClienteMBean.inEditing}" maxlength="10">
+                       <f:convertDateTime  type="date" pattern="dd/MM/yyyy"/>
+                    </h:inputText>
+				</h:panelGrid>
+
+				<a4j:commandButton action="#{ClienteMBean.listAll}"
+					actionListener="#{ClienteMBean.listenerSave}" value="Grava"
+					id="buttonSaveCliente" reRender="tableCliente, manterClienteModal"
+					disabled="#{ClienteMBean.inEditing}" />
+				<a4j:commandButton action="#{ClienteMBean.listAll}"
+					actionListener="#{ClienteMBean.listenerDelete}" value="Exclui"
+					id="buttonDeleteCliente" reRender="tableCliente, manterClienteModal"
+					disabled="#{ClienteMBean.showButton}" />
+		</a4j:form>
+		</rich:modalPanel> 
+		<ui:include src="../cidade/selecionarCidade.xhtml" /> 
+</ui:composition>
